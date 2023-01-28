@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubcategoryController;
@@ -44,4 +45,7 @@ Route::group([
     Route::get('order/diterima', [OrderController::class, 'diterima']);
     Route::get('order/selesai', [OrderController::class, 'selesai']);
     Route::post('order/ubah_status/{order}', [OrderController::class, 'ubah_status']);
+
+
+    Route::get('reports', [ReportController::class, 'index']);
 });
