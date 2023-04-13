@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\Validator;
 
 class TestimoniController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'index']);
+        $this->middleware('auth')->only(['list']);
+        $this->middleware('auth:api')->only(['store', 'update', 'destroy']);
     }
 
+    public function list()
+    {
+        return view('testimoni.index');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -25,6 +29,7 @@ class TestimoniController extends Controller
         $testimonis = Testimoni::all();
 
         return response()->json([
+            'success' => true,
             'data' => $testimonis
         ]);
     }
@@ -50,12 +55,13 @@ class TestimoniController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_testimoni' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'
+            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
         ]);
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -63,14 +69,15 @@ class TestimoniController extends Controller
 
         if ($request->has('gambar')) {
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
         }
 
         $Testimoni = Testimoni::create($input);
 
         return response()->json([
+            'success' => true,
             'data' => $Testimoni
         ]);
     }
@@ -83,7 +90,10 @@ class TestimoniController extends Controller
      */
     public function show(Testimoni $Testimoni)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $Testimoni
+        ]);
     }
 
     /**
@@ -106,6 +116,7 @@ class TestimoniController extends Controller
      */
     public function update(Request $request, Testimoni $Testimoni)
     {
+
         $validator = Validator::make($request->all(), [
             'nama_testimoni' => 'required',
             'deskripsi' => 'required',
@@ -113,7 +124,8 @@ class TestimoniController extends Controller
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -121,18 +133,18 @@ class TestimoniController extends Controller
 
         if ($request->has('gambar')) {
             File::delete('uploads/' . $Testimoni->gambar);
-
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
-        }else {
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        } else {
             unset($input['gambar']);
         }
 
         $Testimoni->update($input);
 
         return response()->json([
+            'success' => true,
             'message' => 'success',
             'data' => $Testimoni
         ]);
@@ -150,6 +162,7 @@ class TestimoniController extends Controller
         $Testimoni->delete();
 
         return response()->json([
+            'success' => true,
             'message' => 'success'
         ]);
     }

@@ -81,7 +81,9 @@ class MemberController extends Controller
      */
     public function show(Member $Member)
     {
-        //
+        return response()->json([
+            'data' => $Member
+        ]);
     }
 
     /**

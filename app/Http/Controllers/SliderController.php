@@ -9,10 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class SliderController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'index']);
+        $this->middleware('auth')->only(['list']);
+        $this->middleware('auth:api')->only(['store', 'update', 'destroy']);
+    }
+
+    public function list()
+    {
+        $sliders = Slider::all();
+
+        return view('slider.index', compact('sliders'));
     }
 
     /**
@@ -25,6 +32,7 @@ class SliderController extends Controller
         $sliders = Slider::all();
 
         return response()->json([
+            'success' => true,
             'data' => $sliders
         ]);
     }
@@ -50,12 +58,13 @@ class SliderController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_slider' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'
+            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
         ]);
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -63,14 +72,15 @@ class SliderController extends Controller
 
         if ($request->has('gambar')) {
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
         }
 
         $Slider = Slider::create($input);
 
         return response()->json([
+            'success' => true,
             'data' => $Slider
         ]);
     }
@@ -83,7 +93,10 @@ class SliderController extends Controller
      */
     public function show(Slider $Slider)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $Slider
+        ]);
     }
 
     /**
@@ -106,6 +119,7 @@ class SliderController extends Controller
      */
     public function update(Request $request, Slider $Slider)
     {
+
         $validator = Validator::make($request->all(), [
             'nama_slider' => 'required',
             'deskripsi' => 'required',
@@ -113,7 +127,8 @@ class SliderController extends Controller
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -121,18 +136,18 @@ class SliderController extends Controller
 
         if ($request->has('gambar')) {
             File::delete('uploads/' . $Slider->gambar);
-
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
-        }else {
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        } else {
             unset($input['gambar']);
         }
 
         $Slider->update($input);
 
         return response()->json([
+            'success' => true,
             'message' => 'success',
             'data' => $Slider
         ]);
@@ -150,6 +165,7 @@ class SliderController extends Controller
         $Slider->delete();
 
         return response()->json([
+            'success' => true,
             'message' => 'success'
         ]);
     }

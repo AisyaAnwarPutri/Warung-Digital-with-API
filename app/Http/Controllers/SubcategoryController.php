@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -9,12 +10,11 @@ use Illuminate\Support\Facades\Validator;
 
 class SubcategoryController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'index']);
+        $this->middleware('auth')->only(['list']);
+        $this->middleware('auth:api')->only(['store', 'update', 'destroy']);
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,11 +22,18 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        $subcategories = Subcategory::all();
+        $subcategories = Subcategory::with('category')->get();
 
         return response()->json([
             'data' => $subcategories
         ]);
+    }
+
+    public function list()
+    {
+        $categories = Category::all();
+
+        return view('subkategori.index', compact('categories'));
     }
 
     /**
@@ -51,12 +58,13 @@ class SubcategoryController extends Controller
             'id_kategori' => 'required',
             'nama_subkategori' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'
+            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
         ]);
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -64,14 +72,15 @@ class SubcategoryController extends Controller
 
         if ($request->has('gambar')) {
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
         }
 
         $Subcategory = Subcategory::create($input);
 
         return response()->json([
+            'success' => true,
             'data' => $Subcategory
         ]);
     }
@@ -84,7 +93,9 @@ class SubcategoryController extends Controller
      */
     public function show(Subcategory $Subcategory)
     {
-        //
+        return response()->json([
+            'data' => $Subcategory
+        ]);
     }
 
     /**
@@ -107,6 +118,7 @@ class SubcategoryController extends Controller
      */
     public function update(Request $request, Subcategory $Subcategory)
     {
+
         $validator = Validator::make($request->all(), [
             'id_kategori' => 'required',
             'nama_subkategori' => 'required',
@@ -115,7 +127,8 @@ class SubcategoryController extends Controller
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -123,18 +136,18 @@ class SubcategoryController extends Controller
 
         if ($request->has('gambar')) {
             File::delete('uploads/' . $Subcategory->gambar);
-
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
-        }else {
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        } else {
             unset($input['gambar']);
         }
 
         $Subcategory->update($input);
 
         return response()->json([
+            'success' => true,
             'message' => 'success',
             'data' => $Subcategory
         ]);
@@ -152,6 +165,7 @@ class SubcategoryController extends Controller
         $Subcategory->delete();
 
         return response()->json([
+            'success' => true,
             'message' => 'success'
         ]);
     }

@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'index']);
+        $this->middleware('auth')->only(['list']);
+        $this->middleware('auth:api')->only(['store', 'update', 'destroy']);
+    }
+
+    public function list()
+    {
+        return view('kategori.index');
     }
 
     /**
@@ -50,12 +55,13 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'
+            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
         ]);
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -63,14 +69,15 @@ class CategoryController extends Controller
 
         if ($request->has('gambar')) {
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
         }
 
         $category = Category::create($input);
 
         return response()->json([
+            'success' => true,
             'data' => $category
         ]);
     }
@@ -83,7 +90,9 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return response()->json([
+            'data' => $category
+        ]);
     }
 
     /**
@@ -106,6 +115,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required',
             'deskripsi' => 'required',
@@ -113,7 +123,8 @@ class CategoryController extends Controller
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -121,18 +132,18 @@ class CategoryController extends Controller
 
         if ($request->has('gambar')) {
             File::delete('uploads/' . $category->gambar);
-
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
-        }else {
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        } else {
             unset($input['gambar']);
         }
 
         $category->update($input);
 
         return response()->json([
+            'success' => true,
             'message' => 'success',
             'data' => $category
         ]);
@@ -150,6 +161,7 @@ class CategoryController extends Controller
         $category->delete();
 
         return response()->json([
+            'success' => true,
             'message' => 'success'
         ]);
     }

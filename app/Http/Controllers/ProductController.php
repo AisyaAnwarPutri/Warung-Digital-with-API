@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'index']);
+        $this->middleware('auth')->only(['list']);
+        $this->middleware('auth:api')->only(['store', 'update', 'destroy']);
+    }
+
+    public function list()
+    {
+        $categories = Category::all();
+        $subcategories = Subcategory::all();
+
+        return view('product.index', compact('categories', 'subcategories'));
     }
 
     /**
@@ -22,7 +32,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category', 'subcategory')->get();
 
         return response()->json([
             'data' => $products
@@ -51,16 +61,17 @@ class ProductController extends Controller
             'id_kategori' => 'required',
             'id_subkategori' => 'required',
             'nama_produk' => 'required',
-            'deskripsi' => 'required',
             'harga' => 'required',
             'tags' => 'required',
-            'sku' => 'required',
-            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'           
+            'gambar' => 'required',
+            'deskripsi' => 'required',
+            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
         ]);
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -68,14 +79,15 @@ class ProductController extends Controller
 
         if ($request->has('gambar')) {
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
         }
 
         $Product = Product::create($input);
 
         return response()->json([
+            'success' => true,
             'data' => $Product
         ]);
     }
@@ -88,7 +100,10 @@ class ProductController extends Controller
      */
     public function show(Product $Product)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $Product
+        ]);
     }
 
     /**
@@ -115,16 +130,17 @@ class ProductController extends Controller
             'id_kategori' => 'required',
             'id_subkategori' => 'required',
             'nama_produk' => 'required',
-            'deskripsi' => 'required',
             'harga' => 'required',
             'tags' => 'required',
-            'sku' => 'required',
-            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'           
+            'gambar' => 'required',
+            'deskripsi' => 'required',
+            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
         ]);
 
         if ($validator->fails()) {
             return response()->json(
-                $validator->errors(), 422
+                $validator->errors(),
+                422
             );
         }
 
@@ -132,18 +148,18 @@ class ProductController extends Controller
 
         if ($request->has('gambar')) {
             File::delete('uploads/' . $Product->gambar);
-
             $gambar = $request->file('gambar');
-            $nama_gambar = time() . rand(1,9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar); //menit ke 6:41 eps 4
-            $input['gambar'] = $nama_gambar; 
-        }else {
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        } else {
             unset($input['gambar']);
         }
 
         $Product->update($input);
 
         return response()->json([
+            'success' => true,
             'message' => 'success',
             'data' => $Product
         ]);
@@ -161,6 +177,7 @@ class ProductController extends Controller
         $Product->delete();
 
         return response()->json([
+            'success' => true,
             'message' => 'success'
         ]);
     }
