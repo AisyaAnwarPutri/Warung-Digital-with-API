@@ -190,7 +190,7 @@ class OrderController extends Controller
     }
 
     public function dikonfirmasi(){
-        $orders = Order::where('status', 'Dikonfirmasi')->get();
+        $orders = Order::with('member')->where('status', 'Dikonfirmasi')->get();
 
         return response()->json([
             'data' => $orders
@@ -198,7 +198,7 @@ class OrderController extends Controller
     }
 
     public function dikemas(){
-        $orders = Order::where('status', 'dikemas')->get();
+        $orders = Order::with('member')->where('status', 'Dikemas')->get();
 
         return response()->json([
             'data' => $orders
@@ -206,7 +206,7 @@ class OrderController extends Controller
     }
 
     public function dikirim(){
-        $orders = Order::where('status', 'Dikirim')->get();
+        $orders = Order::with('member')->where('status', 'Dikirim')->get();
 
         return response()->json([
             'data' => $orders
@@ -214,7 +214,7 @@ class OrderController extends Controller
     }
 
     public function diterima(){
-        $orders = Order::where('status', 'Diterima')->get();
+        $orders = Order::with('member')->where('status', 'Diterima')->get();
 
         return response()->json([
             'data' => $orders
@@ -222,7 +222,7 @@ class OrderController extends Controller
     }
 
     public function selesai(){
-        $orders = Order::where('status', 'Selesai')->get();
+        $orders = Order::with('member')->where('status', 'Selesai')->get();
 
         return response()->json([
             'data' => $orders

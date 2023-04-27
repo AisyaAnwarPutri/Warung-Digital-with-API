@@ -34,6 +34,11 @@ Route::get('/review', [ReviewController::class, 'list']);
 
 
 Route::get('/pesanan/baru', [OrderController::class, 'list']);
-
+Route::get('/pesanan/dikonfirmasi', [OrderController::class, 'dikonfirmasi_list']);
+Route::get('/pesanan/dikemas', [OrderController::class, 'dikemas_list']);
+Route::get('/pesanan/dikirim', [OrderController::class, 'dikirim_list']);
+Route::get('/pesanan/diterima', [OrderController::class, 'diterima_list']);
+Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
+Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
