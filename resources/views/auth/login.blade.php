@@ -23,7 +23,7 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-success">
 
     <div class="container">
 
@@ -36,7 +36,7 @@
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Selamat Datang </h1>
                                     </div>
                                     @if ($errors->any())
                                     <div class="alert alert-danger">
@@ -49,7 +49,7 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user email"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address..." name="email">
+                                                placeholder="Masukkan Alamat Email..." name="email">
                                             @error('email')
                                             <small class="text-danger">
                                                 {{$message}}
@@ -58,7 +58,7 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user password"
-                                                id="exampleInputPassword" placeholder="Password" name="password">
+                                                id="exampleInputPassword" placeholder="Masukkan Paswword" name="password">
                                             @error('password')
                                             <small class="text-danger">
                                                 {{$message}}
@@ -68,11 +68,11 @@
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
+                                                <label class="custom-control-label" for="customCheck">Ingat 
+                                                    Saya?</label>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" class="btn btn-success btn-user btn-block">
                                             Login
                                         </button>
                                     </form>

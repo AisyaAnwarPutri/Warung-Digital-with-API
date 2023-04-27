@@ -13,7 +13,8 @@ class OrderController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => 'index']);
+        $this->middleware('auth')->only(['list', 'dikonfirmasi_list', 'dikemas_list', 'dikirim_list', 'diterima_list', 'selesai_list']);
+        $this->middleware('auth:api')->only(['store', 'update', 'destroy', 'ubah_status', 'baru', 'dikonfirmasi', 'dikemas', 'dikirim', 'diterima', 'selesai']);
     }
 
     /**
@@ -23,11 +24,41 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::with('member')->get();
 
         return response()->json([
             'data' => $orders
         ]);
+    }
+
+    public function list()
+    {
+        return view('pesanan.index');
+    }
+
+    public function dikonfirmasi_list()
+    {
+        return view('pesanan.dikonfirmasi');
+    }
+
+    public function dikemas_list()
+    {
+        return view('pesanan.dikemas');
+    }
+
+    public function dikirim_list()
+    {
+        return view('pesanan.dikirim');
+    }
+
+    public function diterima_list()
+    {
+        return view('pesanan.diterima');
+    }
+
+    public function selesai_list()
+    {
+        return view('pesanan.selesai');
     }
 
     /**
@@ -146,6 +177,15 @@ class OrderController extends Controller
         return response()->json([
             'message' => 'success',
             'data' => $order
+        ]);
+    }
+
+    public function baru()
+    {
+        $orders = Order::with('member')->where('status', 'Baru')->get();
+
+        return response()->json([
+            'data' => $orders
         ]);
     }
 
