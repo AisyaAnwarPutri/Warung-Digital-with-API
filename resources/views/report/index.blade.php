@@ -36,7 +36,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama Barang</th>
+                        <th>Nama Produk</th>
                         <th>Harga</th>
                         <th>Jumlah Dibeli</th>
                         <th>Total Qty</th>
@@ -81,7 +81,7 @@
                     row += `
                         <tr>
                             <td>${index+1}</td>
-                            <td>${val.nama_barang}</td>
+                            <td>${val.nama_produk}</td>
                             <td>${rupiah(val.harga)}</td>
                             <td>${val.jumlah_dibeli}</td>
                             <td>${val.total_qty}</td>
