@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
@@ -32,6 +33,7 @@ Route::get('/slider', [SliderController::class, 'list']);
 Route::get('/produk', [ProductController::class, 'list']);
 Route::get('/testimoni', [TestimoniController::class, 'list']);
 Route::get('/review', [ReviewController::class, 'list']);
+Route::get('/payment', [PaymentController::class, 'list']);
 
 
 Route::get('/pesanan/baru', [OrderController::class, 'list']);

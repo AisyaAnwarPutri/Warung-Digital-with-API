@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,5 +13,9 @@ class Order extends Model
 
     public function member(){
         return $this->belongsTo(Member::class, 'id_member', 'id');
+    }
+
+    public function payment(){
+        return $this->hasMany(PaymentController::class);
     }
 }
