@@ -45,7 +45,7 @@ Tentang
                         <input type="text" class="form-control" name="telepon" placeholder="Telepon" required
                             value="{{$about->telepon}}">
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="">Atas Nama</label>
                         <input type="text" class="form-control" name="atas_nama" placeholder="Atas Nama" required
                             value="{{$about->atas_nama}}">
@@ -54,9 +54,9 @@ Tentang
                         <label for="">No Rekening</label>
                         <input type="text" class="form-control" name="no_rekening" placeholder="No Rekening" required
                             value="{{$about->no_rekening}}">
-                    </div>
+                    </div> --}}
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        <button type="submit" class="btn btn-success btn-block">Submit</button>
                     </div>
                 </form>
             </div>
