@@ -21,10 +21,19 @@ Route::get('/', function () {
 // Route::post('login', [AuthController::class, 'login_member']);
 // Route::post('logout', [AuthController::class, 'logout_member']);
 
-// auth
+// auth login admin
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
 Route::get('logout', [AuthController::class, 'logout']);
+
+// login user
+Route::get('login_member', [AuthController::class, 'login_member']);
+Route::post('login_member', [AuthController::class, 'login_member_action']);
+Route::get('logout_member', [AuthController::class, 'logout_member']);
+
+// register user
+Route::get('register_member', [AuthController::class, 'register_member']);
+Route::post('register_member', [AuthController::class, 'register_member_action']);
 
 // Kategori
 Route::get('/kategori', [CategoryController::class, 'list']);
