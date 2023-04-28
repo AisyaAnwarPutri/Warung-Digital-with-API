@@ -14,9 +14,9 @@
                         <table class="shop_table cart table">
                             <thead>
                                 <tr>
-                                    <th class="product-name" colspan="2">Product</th>
-                                    <th class="product-price">Price</th>
-                                    <th class="product-quantity">Quantity</th>
+                                    <th class="product-name" colspan="2">Produk</th>
+                                    <th class="product-price">Harga</th>
+                                    <th class="product-quantity">Kuantitas</th>
                                     <th class="product-subtotal" colspan="2">Total</th>
                                 </tr>
                             </thead>
@@ -24,8 +24,8 @@
                                 @foreach ($carts as $cart)
                                 <input type="hidden" name="id_produk[]" value="{{$cart->product->id}}">
                                 <input type="hidden" name="jumlah[]" value="{{$cart->jumlah}}">
-                                <input type="hidden" name="size[]" value="{{$cart->size}}">
-                                <input type="hidden" name="color[]" value="{{$cart->color}}">
+                                {{-- <input type="hidden" name="size[]" value="{{$cart->size}}">
+                                <input type="hidden" name="color[]" value="{{$cart->color}}"> --}}
                                 <input type="hidden" name="total[]" value="{{$cart->total}}">
                                 <tr class="cart_item">
                                     <td class="product-thumbnail">
@@ -34,11 +34,11 @@
                                         </a>
                                     </td>
                                     <td class="product-name">
-                                        <a href="#">{{$cart->product->nama_barang}}</a>
-                                        <ul>
+                                        <a href="#">{{$cart->product->nama_produk}}</a>
+                                        {{-- <ul>
                                             <li>Size: {{$cart->size}}</li>
                                             <li>Color: {{$cart->color}}</li>
-                                        </ul>
+                                        </ul> --}}
                                     </td>
                                     <td class="product-price">
                                         <span class="amount">{{ "Rp. " . number_format($cart->product->harga)}}</span>
@@ -67,7 +67,7 @@
                         <div class="col-md-7">
                             <div class="actions">
                                 <div class="wc-proceed-to-checkout">
-                                    <a href="#" class="btn btn-lg btn-dark checkout"><span>proceed to
+                                    <a href="#" class="btn btn-lg btn-dark checkout"><span>Lanjut Ke
                                             checkout</span></a>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
 
             <div class="row">
                 <div class="col-md-6 shipping-calculator-form">
-                    <h2 class="heading relative uppercase bottom-line full-grey mb-30">Calculate Shipping</h2>
+                    <h2 class="heading relative uppercase bottom-line full-grey mb-30">Hitung Pengiriman</h2>
                     <p class="form-row form-row-wide">
                         <select name="provinsi" id="provinsi" class="country_to_state provinsi"
                             rel="calc_shipping_state">
@@ -106,31 +106,31 @@
                     <p>
                         <a href="#" name="calc_shipping" class="btn btn-lg btn-stroke mt-10 mb-mdm-40 update-total"
                             style="padding: 20px 40px">
-                            Update Totals
+                            Update Total
                         </a>
                     </p>
                 </div> <!-- end col shipping calculator -->
 
                 <div class="col-md-6">
                     <div class="cart_totals">
-                        <h2 class="heading relative bottom-line full-grey uppercase mb-30">Cart Totals</h2>
+                        <h2 class="heading relative bottom-line full-grey uppercase mb-30">Total Belanja</h2>
 
                         <table class="table shop_table">
                             <tbody>
                                 <tr class="cart-subtotal">
-                                    <th>Cart Subtotal</th>
+                                    <th>Subtotal Belanja</th>
                                     <td>
                                         <span class="amount cart-total">{{$cart_total}}</span>
                                     </td>
                                 </tr>
                                 <tr class="shipping">
-                                    <th>Shipping</th>
+                                    <th>Pengiriman</th>
                                     <td>
                                         <span class="shipping-cost">0</span>
                                     </td>
                                 </tr>
                                 <tr class="order-total">
-                                    <th>Order Total</th>
+                                    <th>Total Pemesanan</th>
                                     <td>
                                         <input type="hidden" name="grand_total" class="grand_total">
                                         <strong><span class="amount grand-total">0</span></strong>

@@ -68,7 +68,7 @@
             <div class="col-md-6 col-xs-12 product-description-wrap">
                 <ol class="breadcrumb">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="/">Beranda</a>
                     </li>
                     <li>
                         <a href="/products/{{$product->id_subkategori}}">{{$product->subcategory->nama_subkategori}}</a>
@@ -77,7 +77,7 @@
                         Catalog
                     </li>
                 </ol>
-                <h1 class="product-title">{{$product->nama_barang}}</h1>
+                <h1 class="product-title">{{$product->nama_produk}}</h1>
                 <span class="price">
                     <ins>
                         <span class="amount">Rp. {{number_format($product->harga)}}</span>
@@ -233,7 +233,7 @@
                         </div>
                         <div class="product-details">
                             <h3 class="product-title">
-                                <a href="/product/{{$produk->id}}">{{$produk->nama_barang}}</a>
+                                <a href="/product/{{$produk->id}}">{{$produk->nama_produk}}</a>
                             </h3>
                             <span class="category">
                                 <a

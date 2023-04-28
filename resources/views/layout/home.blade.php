@@ -99,11 +99,11 @@
                                     <ul class="nav navbar-nav">
 
                                         <li class="dropdown">
-                                            <a href="/">Home</a>
+                                            <a href="/">Beranda</a>
                                         </li>
 
                                         <li class="dropdown">
-                                            <a href="/about">About</a>
+                                            <a href="/about">Tentang</a>
                                         </li>
 
                                         @php
@@ -111,7 +111,7 @@
                                         @endphp
 
                                         <li class="dropdown">
-                                            <a href="#">Shop</a>
+                                            <a href="#">Belanja</a>
                                             <i class="fa fa-angle-down dropdown-trigger"></i>
                                             <ul class="dropdown-menu megamenu-wide">
                                                 <li>
@@ -148,7 +148,7 @@
                                         </li>
 
                                         <li class="dropdown">
-                                            <a href="/contact">Contact Us</a>
+                                            <a href="/contact">Kontak</a>
                                         </li>
 
                                         <!-- Mobile search -->
@@ -209,7 +209,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <h4>Get the latest updates</h4>
+                            <h4>Dapat Pembaruan Terbaru</h4>
                             <form class="relative newsletter-form">
                                 <input type="email" class="newsletter-input" placeholder="Enter your email">
                                 <input type="submit" class="btn btn-lg btn-dark newsletter-submit" value="Subscribe">
@@ -228,7 +228,7 @@
                             <div class="col-md-3 col-sm-12 col-xs-12">
                                 <div class="widget footer-about-us">
                                     <img src="/front/img/logo_dark.png" alt="" class="logo">
-                                    <p class="mb-30">Zenna Shop is a very slick and clean eCommerce template.</p>
+                                    <p class="mb-30">Warung Bumdes Kuala Alam.</p>
                                     <div class="footer-socials">
                                         <div class="social-icons nobase">
                                             <a href="/front/#"><i class="fa fa-twitter"></i></a>
@@ -241,48 +241,48 @@
 
                             <div class="col-md-2 col-md-offset-1 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Information</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Informasi</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">Our stores</a></li>
-                                        <li><a href="/front/#">About us</a></li>
-                                        <li><a href="/front/#">Business with us</a></li>
-                                        <li><a href="/front/#">Delivery information</a></li>
+                                        <li><a href="/front/#">Warung Kami</a></li>
+                                        <li><a href="/front/#">Tentang</a></li>
+                                        <li><a href="/front/#">Bermitra</a></li>
+                                        <li><a href="/front/#">Informasi Pengiriman</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="col-md-2 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Account</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Akun</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">My account</a></li>
-                                        <li><a href="/front/#">Wishlist</a></li>
-                                        <li><a href="/front/#">Order history</a></li>
-                                        <li><a href="/front/#">Specials</a></li>
+                                        <li><a href="/front/#">Akun Saya</a></li>
+                                        <li><a href="/front/#">Daftar Keinginan</a></li>
+                                        <li><a href="/front/#">Riwayat order</a></li>
+                                        <li><a href="/front/#">Spesial</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="col-md-2 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Useful Links</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Tautan</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">Shipping Policy</a></li>
-                                        <li><a href="/front/#">Stores</a></li>
-                                        <li><a href="/front/#">Returns</a></li>
-                                        <li><a href="/front/#">Terms &amp; Conditions</a></li>
+                                        <li><a href="/front/#">Kebijakan Pengiriman</a></li>
+                                        <li><a href="/front/#">Warung</a></li>
+                                        <li><a href="/front/#">Pengembalian</a></li>
+                                        <li><a href="/front/#">Kebijakan &amp; Ketentuan</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="col-md-2 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Service</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Pelayanan</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">Support</a></li>
-                                        <li><a href="/front/#">Warranty</a></li>
+                                        <li><a href="/front/#">Bantuan</a></li>
+                                        <li><a href="/front/#">Jaminan</a></li>
                                         <li><a href="/front/#">FAQ</a></li>
-                                        <li><a href="/front/#">Contact</a></li>
+                                        <li><a href="/front/#">Kontak</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -297,7 +297,7 @@
 
                             <div class="col-sm-6 copyright sm-text-center">
                                 <span>
-                                    &copy; 2017 Zenna Theme, Made by <a href="http://deothemes.com">DeoThemes</a>
+                                    &copy; 2023 Warung Bumdes <a href="http://deothemes.com">Desa Kuala Alam</a>
                                 </span>
                             </div>
 

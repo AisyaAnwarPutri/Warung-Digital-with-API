@@ -47,9 +47,9 @@
 
         <div class="row heading-row">
             <div class="col-md-12 text-center">
-                <span class="subheading">Hot items of this year</span>
+                <span class="subheading">Produk Teraris</span>
                 <h2 class="heading bottom-line">
-                    trendy products
+                    Produk Populer
                 </h2>
             </div>
         </div>
@@ -74,7 +74,7 @@
                                         href="/products/{{$product->id_subkategori}}">{{$product->subcategory->nama_subkategori}}</a>
                                 </span>
                                 <h3 class="product-title">
-                                    <a href="/product/{{$product->id}}">{{$product->nama_barang}}</a>
+                                    <a href="/product/{{$product->id}}">{{$product->nama_produk}}</a>
                                 </h3>
                                 <span class="price">
                                     <ins>
@@ -83,7 +83,7 @@
                                 </span>
                                 <div class="btn-quickview">
                                     <a href="/product/{{$product->id}}" class="btn btn-md btn-color">
-                                        <span>More</span>
+                                        <span>Lainnya</span>
                                     </a>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
 
         <div class="row heading-row mb-20">
             <div class="col-md-6 col-md-offset-3 text-center">
-                <h2 class="heading white bottom-line">Happy Clients</h2>
+                <h2 class="heading white bottom-line">Pelanggan Senang</h2>
             </div>
         </div>
 

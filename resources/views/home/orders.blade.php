@@ -9,7 +9,7 @@
         <div class="row">
 
             <div class="ecommerce col-xs-12">
-                <h2>My Payments</h2>
+                <h2>Pembayaranku</h2>
                 <table class="table table-ordered table-hover table-striped">
                     <thead>
                         <th>No</th>
@@ -29,7 +29,7 @@
                     </tbody>
                 </table>
 
-                <h2>My Orders</h2>
+                <h2>Pesananku</h2>
                 <table class="table table-ordered table-hover table-striped">
                     <thead>
                         <th>No</th>

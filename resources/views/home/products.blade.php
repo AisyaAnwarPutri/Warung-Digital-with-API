@@ -53,12 +53,12 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <a href="/product/{{$product->id}}" class="product-quickview">More</a>
+                                    <a href="/product/{{$product->id}}" class="product-quickview">Selebihnya</a>
                                 </div>
 
                                 <div class="product-details">
                                     <h3 class="product-title">
-                                        <a href="/product/{{$product->id}}">{{$product->nama_barang}}</a>
+                                        <a href="/product/{{$product->id}}">{{$product->nama_produk}}</a>
                                     </h3>
                                     <span class="category">
                                         <a
@@ -79,7 +79,7 @@
 
                 <!-- Pagination -->
                 <div class="pagination-wrap clearfix">
-                    <p class="result-count">Showing: 12 of 80 results</p>
+                    <p class="result-count">lihat: 12 dari 80 hasil</p>
                     <nav class="pagination right clearfix">
                         <a href="#"><i class="fa fa-angle-left"></i></a>
                         <span class="page-numbers current">1</span>
