@@ -11,15 +11,11 @@ class Category extends Model
 
     protected $guarded = [];
 
-    /*untuk menghubungkan model kategori utama 
-    dengan model subkategori dalam relasi one-to-many*/
     public function Subcategory()
     {
         return $this->hasMany(Subcategory::class);
     }
 
-    /**untuk menghubungkan model kategori
-     *  dengan model produk dalam relasi one-to-many */
     public function product()
     {
         return $this->hasMany(Product::class);

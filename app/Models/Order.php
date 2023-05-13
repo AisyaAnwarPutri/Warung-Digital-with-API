@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\PaymentController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,11 +10,13 @@ class Order extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function member(){
+    public function member()
+    {
         return $this->belongsTo(Member::class, 'id_member', 'id');
     }
 
-    public function payment(){
-        return $this->hasMany(PaymentController::class);
+    public function payment()
+    {
+        return $this->hasMany(Payment::class);
     }
 }
