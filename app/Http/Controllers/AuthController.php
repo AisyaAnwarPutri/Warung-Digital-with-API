@@ -87,6 +87,32 @@ class AuthController extends Controller
 
     public function login_member_action(Request $request)
     {
+        // $validator = Validator::make($request->all(), [
+        //     'email' => 'required|email',
+        //     'password' => 'required',
+        // ]);
+        // if ($validator->fails()) {
+        //     Session::flash('errors', $validator->errors()->toArray());
+        //     return redirect('/login_member');
+        // }
+
+        // $member = Member::where('email', $request->email)->first();
+        // if ($member) {
+        //     if (Hash::check($request->password, $member->password)){
+        //         $request->session()->regenerate();
+        //         echo "Login berhasil";
+        //     }
+        //     else{
+        //         Session::flash('failed', 'Password Salah');
+        //         return redirect('/login_member');
+        //     }
+        // }
+        // else{
+        //     Session::flash('failed', 'Email Tidak Ditemukan');
+        //     return redirect('/login_member');
+        // }
+
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -153,6 +179,6 @@ class AuthController extends Controller
     {
         Auth::guard('webmember')->logout();
         Session::flush();
-        return redirect('/');
+        return redirect('/login_member');
     }
 }

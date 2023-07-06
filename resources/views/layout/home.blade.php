@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>@yield('title', 'Home')</title>
+    <title>@yield('title', 'Beranda | Warung')</title>
 
     <meta charset="utf-8">
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
@@ -10,8 +10,7 @@
     <meta name="description" content="">
 
     <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:400,400i,600,700'
-        rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:400,400i,600,700' rel='stylesheet'>
 
     <!-- Css -->
     <link rel="stylesheet" href="/front/css/bootstrap.min.css" />
@@ -66,11 +65,8 @@
                                 <!-- Logo -->
                                 <div class="logo-container">
                                     <div class="logo-wrap">
-                                        <a href="/">
-                                            @php
-                                            $about = App\Models\About::first();
-                                            @endphp
-                                            <img class="logo-dark2" src="/uploads/{{$about->logo}}" alt="logo">
+                                        <a href="/front/index.html">
+                                            <img class="logo-dark2" src="/front/img/logo_dark2 - .png" alt="logo">
                                         </a>
                                     </div>
                                 </div>
@@ -106,37 +102,27 @@
                                             <a href="/about">Tentang</a>
                                         </li>
 
-                                        @php
-                                        $categories = App\Models\Category::all();
-                                        @endphp
-
                                         <li class="dropdown">
-                                            <a href="#">Belanja</a>
+                                            <a href="#">Shop</a>
                                             <i class="fa fa-angle-down dropdown-trigger"></i>
                                             <ul class="dropdown-menu megamenu-wide">
                                                 <li>
                                                     <div class="megamenu-wrap container">
                                                         <div class="row">
-                                                            @foreach ($categories as $category)
+
                                                             <div class="col-md-3 megamenu-item">
                                                                 <ul class="menu-list">
                                                                     <li>
-                                                                        <span>{{$category->nama_kategori}}</span>
+                                                                        <span>Shop Pages</span>
                                                                     </li>
-                                                                    @php
-                                                                    $subcategories =
-                                                                    App\Models\Subcategory::where('id_kategori',
-                                                                    $category->id)->get();
-                                                                    @endphp
-                                                                    @foreach ($subcategories as $subcategory)
                                                                     <li>
-                                                                        <a
-                                                                            href="/products/{{$subcategory->id}}">{{$subcategory->nama_subkategori}}</a>
+                                                                        <a href="#">
+                                                                            Catalog no Sidebar
+                                                                        </a>
                                                                     </li>
-                                                                    @endforeach
                                                                 </ul>
                                                             </div>
-                                                            @endforeach
+
                                                         </div>
                                                     </div>
                                                 </li>
@@ -148,7 +134,7 @@
                                         </li>
 
                                         <li class="dropdown">
-                                            <a href="/contact">Kontak</a>
+                                            <a href="/contact">Kontak Kami</a>
                                         </li>
 
                                         <!-- Mobile search -->
@@ -168,11 +154,7 @@
                             <div class="flex-child flex-right nav-right hidden-sm hidden-xs">
                                 <ul>
                                     <li class="nav-register">
-                                        @if (Auth::guard('webmember')->check())
-                                        <a href="/profile">{{Auth::guard('webmember')->user()->nama_member}} </a>
-                                        @else
-                                        <a href="/login_member">Login </a>
-                                        @endif
+                                        <a href="/login_member#">Masuk</a>
                                     </li>
                                     <li class="nav-search-wrap style-2 hidden-sm hidden-xs">
                                         <a href="#" class="nav-search search-trigger">
@@ -185,11 +167,6 @@
                                                 <a href="/cart" class="nav-cart-icon"></a>
                                             </div>
                                         </div>
-                                    </li>
-                                    <li class="nav-register">
-                                        @if (Auth::guard('webmember')->check())
-                                        <a href="/logout_member">Logout</a>
-                                        @endif
                                     </li>
                                 </ul>
                             </div>
@@ -209,10 +186,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <h4>Dapat Pembaruan Terbaru</h4>
+                            <h4>Get the latest updates</h4>
                             <form class="relative newsletter-form">
                                 <input type="email" class="newsletter-input" placeholder="Enter your email">
-                                <input type="submit" class="btn btn-lg btn-dark newsletter-submit" value="Subscribe">
+                                <input type="submit" class="btn btn-lg btn-dark newsletter-submit"
+                                    value="Subscribe">
                             </form>
                         </div>
                     </div>
@@ -228,7 +206,7 @@
                             <div class="col-md-3 col-sm-12 col-xs-12">
                                 <div class="widget footer-about-us">
                                     <img src="/front/img/logo_dark.png" alt="" class="logo">
-                                    <p class="mb-30">Warung Bumdes Kuala Alam.</p>
+                                    <p class="mb-30">Zenna Shop is a very slick and clean eCommerce template.</p>
                                     <div class="footer-socials">
                                         <div class="social-icons nobase">
                                             <a href="/front/#"><i class="fa fa-twitter"></i></a>
@@ -241,48 +219,48 @@
 
                             <div class="col-md-2 col-md-offset-1 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Informasi</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Information</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">Warung Kami</a></li>
-                                        <li><a href="/front/#">Tentang</a></li>
-                                        <li><a href="/front/#">Bermitra</a></li>
-                                        <li><a href="/front/#">Informasi Pengiriman</a></li>
+                                        <li><a href="/front/#">Our stores</a></li>
+                                        <li><a href="/front/#">About us</a></li>
+                                        <li><a href="/front/#">Business with us</a></li>
+                                        <li><a href="/front/#">Delivery information</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="col-md-2 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Akun</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Account</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">Akun Saya</a></li>
-                                        <li><a href="/front/#">Daftar Keinginan</a></li>
-                                        <li><a href="/front/#">Riwayat order</a></li>
-                                        <li><a href="/front/#">Spesial</a></li>
+                                        <li><a href="/front/#">My account</a></li>
+                                        <li><a href="/front/#">Wishlist</a></li>
+                                        <li><a href="/front/#">Order history</a></li>
+                                        <li><a href="/front/#">Specials</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="col-md-2 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Tautan</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Useful Links</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">Kebijakan Pengiriman</a></li>
-                                        <li><a href="/front/#">Warung</a></li>
-                                        <li><a href="/front/#">Pengembalian</a></li>
-                                        <li><a href="/front/#">Kebijakan &amp; Ketentuan</a></li>
+                                        <li><a href="/front/#">Shipping Policy</a></li>
+                                        <li><a href="/front/#">Stores</a></li>
+                                        <li><a href="/front/#">Returns</a></li>
+                                        <li><a href="/front/#">Terms &amp; Conditions</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="col-md-2 col-sm-6 col-xs-12">
                                 <div class="widget footer-links">
-                                    <h5 class="widget-title bottom-line left-align grey">Pelayanan</h5>
+                                    <h5 class="widget-title bottom-line left-align grey">Service</h5>
                                     <ul class="list-no-dividers">
-                                        <li><a href="/front/#">Bantuan</a></li>
-                                        <li><a href="/front/#">Jaminan</a></li>
+                                        <li><a href="/front/#">Support</a></li>
+                                        <li><a href="/front/#">Warranty</a></li>
                                         <li><a href="/front/#">FAQ</a></li>
-                                        <li><a href="/front/#">Kontak</a></li>
+                                        <li><a href="/front/#">Contact</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -297,7 +275,7 @@
 
                             <div class="col-sm-6 copyright sm-text-center">
                                 <span>
-                                    &copy; 2023 Warung Bumdes <a href="http://deothemes.com">Desa Kuala Alam</a>
+                                    &copy; 2017 Zenna Theme, Made by <a href="http://deothemes.com">DeoThemes</a>
                                 </span>
                             </div>
 
@@ -326,7 +304,7 @@
     <script type="text/javascript" src="/front/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/front/js/plugins.js"></script>
     <script type="text/javascript" src="/front/js/scripts.js"></script>
-    @stack('js')
+
 </body>
 
 </html>
