@@ -4,7 +4,24 @@
     <!-- Hero Slider -->
       <section class="hero-wrap text-center relative">
         <div id="owl-hero" class="owl-carousel owl-theme light-arrows slider-animated">
-          <div class="hero-slide overlay" style="background-image:url(/front/img/hero/1.jpg)">
+          @if(count($slider)>0)
+            @foreach ($slider as $item)
+              <div class="hero-slide overlay" style="background-image:url(uploads/{{ $item->gambar }})">
+                <div class="container">
+                  <div class="hero-holder">
+                    <div class="hero-message">
+                      <h1 class="hero-title nocaps">{{ $item->nama_slider }}</h1>
+                      <h2 class="hero-subtitle lines">{{ $item->deskripsi }}</h2>
+                      <div class="buttons-holder">
+                        <a href="/front/#" class="btn btn-lg btn-transparent"><span>Shop Now</span></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            @endforeach
+          @endif
+          {{-- <div class="hero-slide overlay" style="background-image:url(/front/img/hero/1.jpg)">
             <div class="container">
               <div class="hero-holder">
                 <div class="hero-message">
@@ -43,11 +60,11 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
       </section> <!-- end hero slider -->
 
-      <!-- Promo Banners -->
+      {{-- <!-- Promo Banners -->
       <section class="section-wrap promo-banners pb-30">
         <div class="container">
           <div class="row">
@@ -87,13 +104,12 @@
             
           </div>
         </div>
-      </section> <!-- end promo banners -->
+      </section> <!-- end promo banners --> --}}
 
 
       <!-- Trendy Products -->
-      <section class="section-wrap-sm new-arrivals pb-50">
+      <section class="section-wrap-sm new-arrivals pb-50 mt-30">
         <div class="container">
-
           <div class="row heading-row">
             <div class="col-md-12 text-center">
               <span class="subheading">Hot items of this year</span>
@@ -103,9 +119,53 @@
             </div>
           </div>
 
-          <div class="row items-grid">              
+          <div class="row items-grid">
+            @if(count($product)>0)
+            @foreach($product as $item)
+              <div class="col-md-3 col-xs-6">
+                <div class="product-item hover-trigger">
+                  <div class="product-img">
+                    <a href="/front/shop-single.html">
+                      <img src="{{ asset('uploads/'.$item->gambar) }}" alt="">
+                    </a>
+                    <div class="product-label">
+                      <span class="sale">sale</span>
+                    </div>
+                    <div class="hover-overlay">                    
+                      <div class="product-actions">
+                        <a href="/front/#" class="product-add-to-wishlist">
+                          <i class="fa fa-heart"></i>
+                        </a>
+                      </div>
+                      <div class="product-details valign">
+                        <span class="category">
+                          <a href="/front/catalogue-grid.html">Women</a>
+                        </span>
+                        <h3 class="product-title">
+                          <a href="/front/shop-single.html">Drawstring Dress</a>
+                        </h3>
+                        <span class="price">
+                          <del>
+                            <span>$730.00</span>
+                          </del>
+                          <ins>
+                            <span class="amount">$399.99</span>
+                          </ins>
+                        </span>
+                        <div class="btn-quickview">
+                          <a href="/front/#" class="btn btn-md btn-color">
+                          <span>Quickview</span>
+                        </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              @endforeach
+            @endif
 
-            <div class="col-md-3 col-xs-6">
+            {{-- <div class="col-md-3 col-xs-6">
               <div class="product-item hover-trigger">
                 <div class="product-img">
                   <a href="/front/shop-single.html">
@@ -395,7 +455,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> --}}
           </div> <!-- end row -->
         </div>
       </section> <!-- end trendy products -->

@@ -39,8 +39,8 @@ Route::group([
         'reviews' => ReviewController::class,
         'orders' => OrderController::class,
         'payments' => PaymentController::class,
-
     ]);
+    Route::post('refresh-token', [AuthController::class, 'refresh']);
 
     Route::get('pesanan/baru', [OrderController::class, 'baru']);
     Route::get('pesanan/dikonfirmasi', [OrderController::class, 'dikonfirmasi']);

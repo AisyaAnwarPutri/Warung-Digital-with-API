@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Testimoni;
+use App\Models\Slider;
+use App\Models\Product;
+
+
 class HomeController extends Controller
 {
     public function index(){
-        return view('home.index');
+        $data['slider'] = Slider::orderBy('id','DESC')->limit(3)->get();
+        $data['product'] = Product::orderBy('id', 'DESC')->limit(8)->get();
+        return view('home.index',$data);
     }
 
     public function products()
@@ -37,7 +44,8 @@ class HomeController extends Controller
 
     public function about()
     {
-        return view('home.about');
+        $testimoni = Testimoni::orderBy('id','DESC')->limit(3)->get();
+        return view('home.about',['testimoni' => $testimoni]);
     }
 
     public function contact()

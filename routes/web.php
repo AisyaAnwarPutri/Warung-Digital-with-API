@@ -17,9 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 
 // auth login admin
-Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::get('logout', [AuthController::class, 'logout']);
+Route::controller(AuthController::class)->group(function(){
+    Route::get('login', 'index')->name('login');
+    Route::post('login', 'do_login');
+    Route::get('logout', 'logout');
+});
+// Route::get('login', [AuthController::class, 'index'])->name('login');
+// Route::post('login', [AuthController::class, 'login']);
+// Route::get('logout', [AuthController::class, 'logout']);
 
 // login user
 Route::get('login_member', [AuthController::class, 'login_member']);

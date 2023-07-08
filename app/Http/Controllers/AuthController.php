@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -16,36 +17,22 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function do_login(Request $request)
     {
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
         $credentials = request(['email', 'password']);
-
-        if (auth()->attempt($credentials)) {
-            $token = Auth::guard('api')->attempt($credentials);
+        if(auth()->attempt($credentials)){
             return response()->json([
                 'success' => true,
                 'message' => 'Login Berhasil',
-                'token' => $token
             ]);
         }
-
         return response()->json([
             'success' => false,
             'message' => 'email atau password salah'
-        ]);
-    }
-
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
 
@@ -62,14 +49,12 @@ class AuthController extends Controller
             'password' => 'required|same:konfirmasi_password',
             'konfirmasi_password' => 'required|same:password',
         ]);
-
         if ($validator->fails()) {
             return response()->json(
                 $validator->errors(),
                 422
             );
         }
-
         $input = $request->all();
         $input['password'] = bcrypt($request->password);
         unset($input['konfirmasi_password']);
@@ -87,45 +72,16 @@ class AuthController extends Controller
 
     public function login_member_action(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'email' => 'required|email',
-        //     'password' => 'required',
-        // ]);
-        // if ($validator->fails()) {
-        //     Session::flash('errors', $validator->errors()->toArray());
-        //     return redirect('/login_member');
-        // }
-
-        // $member = Member::where('email', $request->email)->first();
-        // if ($member) {
-        //     if (Hash::check($request->password, $member->password)){
-        //         $request->session()->regenerate();
-        //         echo "Login berhasil";
-        //     }
-        //     else{
-        //         Session::flash('failed', 'Password Salah');
-        //         return redirect('/login_member');
-        //     }
-        // }
-        // else{
-        //     Session::flash('failed', 'Email Tidak Ditemukan');
-        //     return redirect('/login_member');
-        // }
-
-
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
         if ($validator->fails()) {
             Session::flash('errors', $validator->errors()->toArray());
             return redirect('/login_member');
         }
-
         $credentials = $request->only('email', 'password');
         $member = Member::where('email', $request->email)->first();
-
         if ($member) {
             if (Auth::guard('webmember')->attempt($credentials)) {
                 $request->session()->regenerate();
@@ -154,17 +110,14 @@ class AuthController extends Controller
             'password' => 'required|same:konfirmasi_password',
             'konfirmasi_password' => 'required|same:password',
         ]);
-
         if ($validator->fails()) {
             Session::flash('errors', $validator->errors()->toArray());
             return redirect('/register_member');
         }
-
         $input = $request->all();
         $input['password'] = Hash::make($request->password);
         unset($input['konfirmasi_password']);
         Member::create($input);
-
         Session::flash('success', 'Akun Berhasil Dibuat!');
         return redirect('/login_member');
     }

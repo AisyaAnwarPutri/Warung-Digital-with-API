@@ -32,8 +32,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category', 'subcategory')->get();
-
+        $products = Product::with('category', 'subcategory')->limit(2)->get();
         return response()->json([
             'data' => $products
         ]);
@@ -88,6 +87,7 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => 'Data berhasil ditambah',
             'data' => $Product
         ]);
     }
@@ -160,7 +160,7 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'success',
+            'message' => 'Data berhasil update',
             'data' => $Product
         ]);
     }
