@@ -17,9 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 
 // auth login admin
-Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::get('logout', [AuthController::class, 'logout']);
+Route::controller(AuthController::class)->group(function(){
+	 Route::get('login', 'index')->name('login');
+	 Route::post('login', 'do_login');
+	 Route::get('logout', 'logout');
+});
+// Route::get('login', [AuthController::class, 'index'])->name('login');
+// Route::post('login', [AuthController::class, 'login']);
+// Route::get('logout', [AuthController::class, 'logout']);
 
 // login user
 Route::get('login_member', [AuthController::class, 'login_member']);
@@ -30,11 +35,48 @@ Route::get('logout_member', [AuthController::class, 'logout_member']);
 Route::get('register_member', [AuthController::class, 'register_member']);
 Route::post('register_member', [AuthController::class, 'register_member_action']);
 
-// Kategori
-Route::get('/kategori', [CategoryController::class, 'list']);
-Route::get('/subkategori', [SubcategoryController::class, 'list']);
+# Kategori start
+Route::controller(CategoryController::class)
+	->prefix('kategori')
+	->as('kategori.')
+	->group(function(){
+		Route::get('/', 'index');
+		Route::post('get', 'list')->name('get');
+});
+// Route::get('/kategori', [CategoryController::class, 'list']);
+# Kategori end
+
+# Sub kategori start
+Route::controller(SubcategoryController::class)
+	->prefix('subkategori')
+	->as('sub_kategori.')
+	->group(function(){
+		Route::get('/', 'index');
+		Route::post('get', 'list')->name('get');
+});
+// Route::get('/subkategori', [SubcategoryController::class, 'list']);
+# Sub kategori end
+
+# Produk start
+Route::controller(ProductController::class)
+	->prefix('produk')
+	->as('produk.')
+	->group(function(){
+		Route::get('/', 'index')->name('index');
+		Route::post('form', 'form')->name('form_produk');
+		Route::post('store', 'store')->name('save_produk');
+		Route::post('destroy', 'destroy')->name('destroy_produk');
+});
+# Produk end
+
 Route::get('/slider', [SliderController::class, 'list']);
-Route::get('/produk', [ProductController::class, 'list']);
+// Route::controller(ProductController::class)->group(function(){
+// 	Route::prefix('produk')->group(function(){
+// 		Route::get('/', 'index')->name('produk');
+// 		Route::post('form', 'form')->name('form_produk');
+// 		Route::post('store', 'form')->name('save_produk');
+// 	});
+// });
 Route::get('/testimoni', [TestimoniController::class, 'list']);
 Route::get('/review', [ReviewController::class, 'list']);
 Route::get('/payment', [PaymentController::class, 'list']);

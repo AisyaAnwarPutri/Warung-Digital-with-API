@@ -97,7 +97,6 @@
 
     <script>
         $(function(){
-
             function setCookie(name,value,days) {
                 var expires = "";
                 if (days) {
@@ -110,11 +109,9 @@
 
             $('.form-login').submit(function(e){
                 e.preventDefault();
-
                 const email = $('.email').val();
                 const password = $('.password').val();
                 const csrf_token = $('meta[name="csrf-token"]').attr('content')
-
                 $.ajax({
                     url : '/login',
                     type : 'POST',
@@ -124,13 +121,10 @@
                         _token : csrf_token
                     },
                     success : function(data){
-                        if (!data.success) {
-                            alert(data.message)
+                        alert(data.message)
+                        if (data.success) {
+                            window.location.href = '/dashboard';
                         }
-
-                        localStorage.setItem('token', data.token)
-                        window.location.href = '/dashboard';
-
                     }
                 });
             });
