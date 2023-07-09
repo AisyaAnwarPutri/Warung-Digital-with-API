@@ -152,10 +152,10 @@
 					$.post("{{route('produk.destroy_produk')}}",{id:id}).done((res)=>{
 						if(res.success){
 							Swal.fire({
-								icon: res.status,
+								icon: 'success',
 								title: 'Berhasil',
 								text: res.message,
-								timer: 1300,
+								timer: 1000,
 								showConfirmButton: false,
 							});
 							$('#dataTable').DataTable().ajax.reload()
@@ -167,10 +167,7 @@
 								showConfirmButton: true,
 							});
 						}
-						$('#dataTable').DataTable().ajax.reload()
 					});
-				}else{
-					console.log('cancel')
 				}
 			});
 		}
