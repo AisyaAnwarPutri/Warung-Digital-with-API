@@ -69,7 +69,19 @@ Route::controller(ProductController::class)
 });
 # Produk end
 
-Route::get('/slider', [SliderController::class, 'list']);
+# Slider start
+Route::controller(SliderController::class)
+	->prefix('slider')
+	->as('slider.')
+	->group(function(){
+		Route::get('/', 'index')->name('index');
+		Route::post('list', 'list')->name('list');
+		Route::post('store', 'store')->name('store');
+		Route::post('get', 'get')->name('get');
+		Route::post('destroy', 'destroy')->name('destroy');
+});
+# Slider end
+// Route::get('/slider', [SliderController::class, 'list']);
 Route::get('/testimoni', [TestimoniController::class, 'list']);
 Route::get('/review', [ReviewController::class, 'list']);
 Route::get('/payment', [PaymentController::class, 'list']);
