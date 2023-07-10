@@ -1,4 +1,4 @@
-@extends('layout.app')
+<!-- @extends('layout.app')
 
 @section('title', 'Data Testimoni')
 
@@ -203,4 +203,4 @@
 
     });
 </script>
-@endpush
+@endpush -->

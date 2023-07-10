@@ -70,13 +70,6 @@ Route::controller(ProductController::class)
 # Produk end
 
 Route::get('/slider', [SliderController::class, 'list']);
-// Route::controller(ProductController::class)->group(function(){
-// 	Route::prefix('produk')->group(function(){
-// 		Route::get('/', 'index')->name('produk');
-// 		Route::post('form', 'form')->name('form_produk');
-// 		Route::post('store', 'form')->name('save_produk');
-// 	});
-// });
 Route::get('/testimoni', [TestimoniController::class, 'list']);
 Route::get('/review', [ReviewController::class, 'list']);
 Route::get('/payment', [PaymentController::class, 'list']);
@@ -98,7 +91,7 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 
 // Route untuk Beranda
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/product/{category}', [HomeController::class, 'product']);
+Route::get('/products/{category}', [HomeController::class, 'product']);
 Route::get('/product/{id}', [HomeController::class, 'product']);
 Route::get('/orders', [HomeController::class, 'orders']);
 Route::get('/cart', [HomeController::class, 'cart']);
@@ -106,3 +99,10 @@ Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/about', [HomeController::class, 'about']);
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/faq', [HomeController::class, 'faq']);
+
+Route::controller(HomeController::class)
+	// ->prefix('subkategori')
+	// ->as('sub_kategori.')
+	->group(function(){
+		Route::post('store-orders', 'store_orders')->name('store_orders');
+});

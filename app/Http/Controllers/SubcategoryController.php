@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class SubcategoryController extends Controller{
 	public function __construct(){
-		$this->middleware('auth')->only(['list']);
-		$this->middleware('auth:api')->only(['store', 'update', 'destroy']);
+		// $this->middleware('auth')->only(['list']);
+		// $this->middleware('auth:api')->only(['store', 'update', 'destroy']);
 	}
 
 	public function index(){
