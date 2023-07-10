@@ -20,7 +20,7 @@
                         <th>No</th>
                         <th>Nama Slider</th>
                         <th>Deskripsi</th>
-                        <th>Gambar</th>
+                        {{-- <th>Gambar</th> --}}
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -45,18 +45,16 @@
                         <form class="form-slider">
                             <div class="form-group">
                                 <label for="">Nama slider</label>
-                                <input type="text" class="form-control" name="nama_slider" placeholder="Nama slider"
-                                    required>
+                                <input type="text" class="form-control" name="nama_slider" placeholder="Nama slider" required>
                             </div>
                             <div class="form-group">
                                 <label for="">Deskripsi</label>
-                                <textarea name="deskripsi" placeholder="Deskripsi" class="form-control" id="" cols="30"
-                                    rows="10" required></textarea>
+                                <textarea name="deskripsi" placeholder="Deskripsi" class="form-control" id="" cols="30" rows="10" required></textarea>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="">Gambar</label>
                                 <input type="file" class="form-control" name="gambar">
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-block">Submit</button>
                             </div>
@@ -82,7 +80,6 @@
             success: function({
                 data
             }) {
-
                 let row;
                 data.map(function(val, index) {
                     row += `
@@ -90,7 +87,6 @@
                             <td>${index+1}</td>
                             <td>${val.nama_slider}</td>
                             <td>${val.deskripsi}</td>
-                            <td><img src="/uploads/${val.gambar}" width="150"></td>
                             <td>
                                 <a href="#modal-form" data-id="${val.id}" class="btn btn-warning modal-ubah">Edit</a>
                                 <a href="#" data-id="${val.id}" class="btn btn-danger btn-hapus">hapus</a>
@@ -98,7 +94,7 @@
                         </tr>
                         `;
                 });
-
+                // <td><img src="/uploads/${val.gambar}" width="150"></td>
                 $('tbody').append(row)
             }
         });

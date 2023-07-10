@@ -89,9 +89,12 @@ class ProductController extends Controller{
 			'deskripsi.required' => 'Deskripsi harus diisi',
 		];
 		if($empty_id || $gambar){ # Required gambar hanya ketika tambah data
-			$rules = [...$rules,'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'];
-			$message = [
-				...$message,
+			$rules += [
+				// ...$rules,
+				'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
+			];
+			$message += [
+				// ...$message,
 				'gambar.required' => 'Gambar harus diisi',
 				'gambar.image' => 'Gambar harus berupa image',
 				'gambar.mimes' => 'Format gambar harus berupa: jpg, png, jpeg, webp',
