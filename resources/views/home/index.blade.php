@@ -93,7 +93,11 @@
 						<div class="product-item hover-trigger">
 							<div class="product-img">
 								<a href="/front/shop-single.html">
-									<img src="{{ asset('storage/'.$item->gambar) }}" alt="">
+                           @if(file_exists(public_path().'/storage/'.$item->gambar))
+									<img src="{{ asset('storage/'.$item->gambar) }}" alt="" width="300" height="300" style="width:auto; height:30%;">
+                           @else
+									<img src="{{ asset('assets/default.png') }}" alt="" width="300" height="300" style="width:auto; height:30%;">
+                           @endif
 								</a>
 								<!-- <div class="product-label">
 									<span class="sale">Terjual</span>

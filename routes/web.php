@@ -99,8 +99,17 @@ Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
 Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
 
 Route::get('/laporan', [ReportController::class, 'index']);
-Route::get('/tentang', [TentangController::class, 'index']);
-Route::post('/tentang/{about}', [TentangController::class, 'update']);
+# Produk start
+Route::controller(TentangController::class)
+	->prefix('tentang')
+	->as('tentang.')
+	->group(function(){
+		Route::get('/', 'index')->name('index');
+		Route::post('store', 'store')->name('store');
+});
+# Produk end
+// Route::get('/tentang', [TentangController::class, 'index']);
+// Route::post('/tentang/{about}', [TentangController::class, 'update']);
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 

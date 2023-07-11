@@ -9,6 +9,14 @@
 	.form-check-input:active{
 		filter: brightness(100%);
 	}
+	#errStok{
+		margin-top:4px;
+		background: #ff5757;
+		color:#fff;
+		padding:4px;
+		display:none;
+		width: 250p
+	}
 </style>
 
 @php
@@ -27,12 +35,17 @@
 		<hr>
 		<form class="g-3 formSave">
 			<div class="row mb-2">
-				<div class="col-md-12">
+				<div class="col-md-6">
 					<label class="form-label">Kategori <span class="text-danger">*)</span></label>
 					<input type="hidden" class="form-control" name="id_produk" id="id_produk" value="{{$product?$product->id:''}}">
 					<select class="single-select" name="id_kategori" id="id_kategori">
 						<!-- <option value="first" selected disabled>--Pilih Kategori--</option> -->
 					</select>
+				</div>
+				<div class="col-md-6">
+					<label class="form-label">Stok <span class="text-danger">*)</span></label>
+					<input type="text" class="form-control" name="stok" id="stok" placeholder="Stok" value="{{$product?$product->stok:''}}">
+               <div id="errStok"></div>
 				</div>
 				<!-- <div class="col-md-6">
 					<label class="form-label">Sub Kategori <span class="text-danger">*)</span></label>
@@ -44,11 +57,11 @@
 			<div class="row mb-2">
 				<div class="col-md-4">
 					<label class="form-label">Nama Produk <span class="text-danger">*)</span></label>
-					<input type="text" class="form-control datepicker" name="nama_produk" id="nama_produk" placeholder="Nama Produk" value="{{$product?$product->nama_produk:''}}">
+					<input type="text" class="form-control" name="nama_produk" id="nama_produk" placeholder="Nama Produk" value="{{$product?$product->nama_produk:''}}">
 				</div>
 				<div class="col-md-4">
 					<label class="form-label">Harga <span class="text-danger">*)</span></label>
-					<input type="text" class="form-control datepicker" name="harga" id="harga" onkeyup="ubahFormat(this)" placeholder="Harga" value="{{$product?rupiah($product->harga):''}}">
+					<input type="text" class="form-control" name="harga" id="harga" onkeyup="ubahFormat(this)" placeholder="Harga" value="{{$product?rupiah($product->harga):''}}">
 				</div>
 				<div class="col-md-4">
 					<label class="form-label">Tags</label>
@@ -100,26 +113,16 @@
 
 <script>
 	$(document).ready(()=>{
-		// $('#penanggungJawab').keypress(function(e){
-		// 	var penanggungJawab = $('#penanggungJawab').val()
-		// 	var res = penanggungJawab.toString().replace(/[^,\d]/g, "")
-		// 	$('#penanggungJawab').val(res)
-		// 	if(e.which!=8 && isNaN(String.fromCharCode(e.which))){
-		// 		e.preventDefault()
-		// 		$('#errPenanggungJawab').html('Hanya angka').stop().show().fadeOut('slow')
-		// 		return false;
-		// 	}
-		// })
-		// $('#jumlahOrang').keypress(function(e){
-		// 	var jumlahOrang = $('#jumlahOrang').val()
-		// 	var res = jumlahOrang.toString().replace(/[^,\d]/g, "")
-		// 	$('#jumlahOrang').val(res)
-		// 	if(e.which!=8 && isNaN(String.fromCharCode(e.which))){
-		// 		e.preventDefault()
-		// 		$('#errJumlahOrang').html('Hanya angka').stop().show().fadeOut('slow')
-		// 		return false;
-		// 	}
-		// })
+		$('#stok').keypress(function(e){
+			var stok = $('#stok').val()
+			var res = stok.toString().replace(/[^,\d]/g, "")
+			$('#stok').val(res)
+			if(e.which!=8 && isNaN(String.fromCharCode(e.which))){
+				e.preventDefault()
+				$('#errStok').html('Hanya angka').stop().show().fadeOut('slow')
+				return false;
+			}
+		})
 	});
 	$(document).on('select2:open',()=>{
 		document.querySelector('.select2-search__field').focus();

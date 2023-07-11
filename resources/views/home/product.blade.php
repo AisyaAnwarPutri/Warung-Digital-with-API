@@ -19,7 +19,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 							<i class="ui-zoom zoom-icon"></i>
 						</a>
 					</div>
-					<div class="gallery-cell">
+					<!-- <div class="gallery-cell">
 						<a href="{{$url_image}}" class="lightbox-img">
 							<img src="{{$url_image}}" alt="" />
 							<i class="ui-zoom zoom-icon"></i>
@@ -42,10 +42,10 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 							<img src="{{$url_image}}" alt="" />
 							<i class="ui-zoom zoom-icon"></i>
 						</a>
-					</div>
+					</div> -->
 				</div> <!-- end gallery main -->
 
-				<div class="gallery-thumbs">
+				<!-- <div class="gallery-thumbs">
 					<div class="gallery-cell">
 						<img src="{{$url_image}}" alt="" />
 					</div>
@@ -61,7 +61,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 					<div class="gallery-cell">
 						<img src="{{$url_image}}" alt="" />
 					</div>
-				</div> <!-- end gallery thumbs -->
+				</div> -->
 			</div> <!-- end col img slider -->
 			<div class="col-md-6 col-xs-12 product-description-wrap">
 				<ol class="breadcrumb">
@@ -69,10 +69,10 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 						<a href="/">Beranda</a>
 					</li>
 					<li>
-						<a href="/products/{{$product->id_subkategori}}">{{$product->subcategory->nama_subkategori}}</a>
+						<a href="/products/{{$product->id_kategori}}">{{$product->category->nama_kategori}}</a>
 					</li>
 					<li class="active">
-						Catalog
+                  {{$product->nama_produk}}
 					</li>
 				</ol>
 				<h1 class="product-title">{{$product->nama_produk}}</h1>
@@ -83,19 +83,12 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 				</span>
 				<p class="short-description">{{$product->deskripsi}}</p>
 
-				{{-- <div class="color-swatches clearfix">
-					<span>Color:</span>
-					@php
-					$colours = explode(',',$product->warna);
-					@endphp
-
-					@foreach ($colours as $colour)
-					<input type="radio" name="color" id="{{$colour}}" value="{{$colour}}" class="color">
-					<label for="{{$colour}}" style="margin-right: 20px">{{$colour}}</label>
-					@endforeach
+				<div class="color-swatches clearfix">
+					<span>Stok:</span>
+					<span for="" style="margin-right: 20px">{{$product->stok}}</span>
 				</div>
 
-				<div class="size-options clearfix">
+				{{--<div class="size-options clearfix">
 					<span>Size:</span>
 					@php
 					$sizes = explode(',',$product->ukuran);
@@ -199,7 +192,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 								<a href="/product/{{$product->id}}">{{$product->nama_produk}}</a>
 							</h3>
 							<span class="category">
-								<a href="/products/{{$product->id_subkategori}}">{{$product->subcategory->nama_subkategori}}</a>
+								<a href="/products/{{$product->id_kategori}}">{{$product->category->nama_kategori}}</a>
 							</span>
 						</div>
 						<span class="price">

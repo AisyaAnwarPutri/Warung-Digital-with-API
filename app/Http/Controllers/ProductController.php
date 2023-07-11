@@ -25,15 +25,11 @@ class ProductController extends Controller{
 
 	public function index(){
 		if(request()->ajax()){
-			$products = Product::with('category', 'subcategory')->orderBy('id','ASC')->get();
+			$products = Product::with('category')->orderBy('id','ASC')->get();
 			return DataTables::of($products)
 				->addIndexColumn()
 				->addColumn('kategori',function($row){
 					$text = $row->category ? $row->category->nama_kategori : '-';
-					return "<p class='text-center'>$text</p>";
-				})
-				->addColumn('sub_kateogori',function($row){
-					$text = $row->subcategory ? $row->subcategory->nama_subkategori : '-';
 					return "<p class='text-center'>$text</p>";
 				})
 				->addColumn('gambar',function($row){
@@ -49,7 +45,7 @@ class ProductController extends Controller{
 						<button class='btn btn-sm btn-danger' onclick='hapusProduk($row->id)' type='button' title='hapus'><i class='fa-solid fa-trash'></i></button>
 					";
 					return $txt;
-				})->rawColumns(['kategori','sub_kateogori','gambar','aksi'])->toJson();
+				})->rawColumns(['kategori','gambar','aksi'])->toJson();
 		}
 		return view('product.index');
 	}
@@ -72,25 +68,23 @@ class ProductController extends Controller{
 		$empty_id = empty($id_produk);
 		$rules = [
 			'id_kategori' => 'required',
-			// 'id_subkategori' => 'required',
+			'stok' => 'required',
 			'nama_produk' => 'required',
 			'harga' => 'required',
 			'deskripsi' => 'required',
 		];
 		$message = [
 			'id_kategori.required' => 'Kategori harus diisi',
-			// 'id_subkategori.required' => 'Sub kategori harus diisi',
+			'stok.required' => 'Stok harus diisi',
 			'nama_produk.required' => 'Nama produk harus diisi',
 			'harga.required' => 'Harga harus diisi',
 			'deskripsi.required' => 'Deskripsi harus diisi',
 		];
-		if($empty_id || $gambar){ # Required gambar hanya ketika tambah data
+		if($empty_id || $gambar){ # Required gambar hanya ketika tambah data{produk baru}
 			$rules += [
-				// ...$rules,
 				'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
 			];
 			$message += [
-				// ...$message,
 				'gambar.required' => 'Gambar harus diisi',
 				'gambar.image' => 'Gambar harus berupa image',
 				'gambar.mimes' => 'Format gambar harus berupa: jpg, png, jpeg, webp',
@@ -116,7 +110,7 @@ class ProductController extends Controller{
 
 		$store = $empty_id ? new Product : Product::find($id_produk);
 		$store->id_kategori = $request->id_kategori;
-		// $store->id_subkategori = $request->id_subkategori;
+		$store->stok = $request->stok;
 		$store->nama_produk = $request->nama_produk;
 		$store->deskripsi = $request->deskripsi;
 		$store->harga = preg_replace("/\D+/", "", $request->harga);

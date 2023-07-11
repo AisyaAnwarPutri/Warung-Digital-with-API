@@ -16,13 +16,12 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->integer('id_kategori');
-            $table->integer('id_subkategori');
             $table->string('nama_produk');
             $table->string('gambar');
             $table->text('deskripsi');
+            $table->integer('stok');
             $table->integer('harga');
-            $table->string('tags');
-            $table->string('sku');
+            $table->string('tags')->nullable();
             $table->timestamps();
         });
     }

@@ -17,7 +17,8 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->integer('id_member');
             $table->integer('invoice');
-            $table->integer('grand_total');
+            $table->integer('grand_total')->comment('Total semua harga produk di detail order');
+            $table->string('status');
             $table->timestamps();
         });
 
@@ -26,7 +27,7 @@ class CreateOrdersTable extends Migration
             $table->integer('id_order');
             $table->integer('id_produk');
             $table->integer('jumlah');
-            $table->integer('total');
+            $table->integer('harga')->comment('Harga per produk');
             $table->timestamps();
         });
     }
