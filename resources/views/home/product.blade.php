@@ -83,7 +83,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 				</span>
 				<p class="short-description">{{$product->deskripsi}}</p>
 
-				<div class="color-swatches clearfix">
+				{{-- <div class="color-swatches clearfix">
 					<span>Color:</span>
 					@php
 					$colours = explode(',',$product->warna);
@@ -105,7 +105,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 					<input type="radio" name="sizes" id="{{$size}}" value="{{$size}}" class="size">
 					<label for="{{$size}}" style="margin-right: 20px">{{$size}}</label>
 					@endforeach
-				</div>
+				</div> --}}
 
 				<div class="product-actions">
 					<span>Qty:</span>
