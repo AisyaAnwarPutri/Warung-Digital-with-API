@@ -28,10 +28,6 @@ class ProductController extends Controller{
 			$products = Product::with('category', 'subcategory')->orderBy('id','ASC')->get();
 			return DataTables::of($products)
 				->addIndexColumn()
-				->addColumn('pendaftar',function($row){
-					$txt = "<button class='btn btn-sm btn-info detailPendaftar' onclick='detailPendaftar($row->id)'><b>($row->pendaftar_count Orang)</b> Detail</button>";
-					return $txt;
-				})
 				->addColumn('kategori',function($row){
 					$text = $row->category ? $row->category->nama_kategori : '-';
 					return "<p class='text-center'>$text</p>";
@@ -53,7 +49,7 @@ class ProductController extends Controller{
 						<button class='btn btn-sm btn-danger' onclick='hapusProduk($row->id)' type='button' title='hapus'><i class='fa-solid fa-trash'></i></button>
 					";
 					return $txt;
-				})->rawColumns(['pendaftar','kategori','sub_kateogori','gambar','aksi'])->toJson();
+				})->rawColumns(['kategori','sub_kateogori','gambar','aksi'])->toJson();
 		}
 		return view('product.index');
 	}
@@ -76,14 +72,14 @@ class ProductController extends Controller{
 		$empty_id = empty($id_produk);
 		$rules = [
 			'id_kategori' => 'required',
-			'id_subkategori' => 'required',
+			// 'id_subkategori' => 'required',
 			'nama_produk' => 'required',
 			'harga' => 'required',
 			'deskripsi' => 'required',
 		];
 		$message = [
 			'id_kategori.required' => 'Kategori harus diisi',
-			'id_subkategori.required' => 'Sub kategori harus diisi',
+			// 'id_subkategori.required' => 'Sub kategori harus diisi',
 			'nama_produk.required' => 'Nama produk harus diisi',
 			'harga.required' => 'Harga harus diisi',
 			'deskripsi.required' => 'Deskripsi harus diisi',
@@ -120,7 +116,7 @@ class ProductController extends Controller{
 
 		$store = $empty_id ? new Product : Product::find($id_produk);
 		$store->id_kategori = $request->id_kategori;
-		$store->id_subkategori = $request->id_subkategori;
+		// $store->id_subkategori = $request->id_subkategori;
 		$store->nama_produk = $request->nama_produk;
 		$store->deskripsi = $request->deskripsi;
 		$store->harga = preg_replace("/\D+/", "", $request->harga);

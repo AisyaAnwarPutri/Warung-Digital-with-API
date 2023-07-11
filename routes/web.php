@@ -40,8 +40,11 @@ Route::controller(CategoryController::class)
 	->prefix('kategori')
 	->as('kategori.')
 	->group(function(){
-		Route::get('/', 'index');
-		Route::post('get', 'list')->name('get');
+		Route::get('/', 'index')->name('index');
+		Route::post('list', 'list')->name('list');
+		Route::post('get', 'get')->name('get');
+		Route::post('store', 'store')->name('store');
+		Route::post('destroy', 'destroy')->name('destroy');
 });
 // Route::get('/kategori', [CategoryController::class, 'list']);
 # Kategori end
@@ -52,7 +55,7 @@ Route::controller(SubcategoryController::class)
 	->as('sub_kategori.')
 	->group(function(){
 		Route::get('/', 'index');
-		Route::post('get', 'list')->name('get');
+		Route::post('list', 'list')->name('list');
 });
 // Route::get('/subkategori', [SubcategoryController::class, 'list']);
 # Sub kategori end

@@ -27,19 +27,19 @@
 		<hr>
 		<form class="g-3 formSave">
 			<div class="row mb-2">
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<label class="form-label">Kategori <span class="text-danger">*)</span></label>
 					<input type="hidden" class="form-control" name="id_produk" id="id_produk" value="{{$product?$product->id:''}}">
 					<select class="single-select" name="id_kategori" id="id_kategori">
 						<!-- <option value="first" selected disabled>--Pilih Kategori--</option> -->
 					</select>
 				</div>
-				<div class="col-md-6">
+				<!-- <div class="col-md-6">
 					<label class="form-label">Sub Kategori <span class="text-danger">*)</span></label>
 					<select class="single-select" name="id_subkategori" id="id_subkategori">
 						<option value="first" selected disabled>--Pilih Sub Kategori--</option>
 					</select>
-				</div>
+				</div> -->
 			</div>
 			<div class="row mb-2">
 				<div class="col-md-4">
@@ -130,7 +130,7 @@
 		$('.pan').pan()
 		if(status=='Tambah'){
 			setKategori()
-			setSubKategori()
+			// setSubKategori()
 		}else{
 			var data = JSON.parse('{!!$product!!}')
 			if(data.category===null){
@@ -138,11 +138,11 @@
 			}else{
 				setKategori(data.category.id)
 			}
-			if(data.subcategory===null){
-				setSubKategori()
-			}else{
-				setSubKategori(data.subcategory.id)
-			}
+			// if(data.subcategory===null){
+			// 	setSubKategori()
+			// }else{
+			// 	setSubKategori(data.subcategory.id)
+			// }
 		}
 	})
 	var loadFile = function(event){
@@ -159,7 +159,7 @@
 	}
 
 	function setKategori(param=''){
-		$.post('{{route("kategori.get")}}').done((res)=>{
+		$.post('{{route("kategori.list")}}').done((res)=>{
 			if(res.success){
 				var html = '<option value="first" selected disabled>--Pilih Kategori--</option>'
 				$.each(res.data,(i,val)=>{
@@ -186,34 +186,34 @@
 			}
 		})
 	}
-	function setSubKategori(param=''){
-		$.post('{{route("sub_kategori.get")}}').done((res)=>{
-			if(res.success){
-				var html = '<option value="first" selected disabled>--Pilih Sub Kategori--</option>'
-				$.each(res.data,(i,val)=>{
-					var selected = ''
-					if(val.id==param){
-						selected = 'selected'
-					}
-					html += `<option value="${val.id}" ${selected}>${val.nama_subkategori}</option>`
-				})
-				$('#id_subkategori').html(html)
-				// $.each(res.data,(i,val)=>{
-					// 	res.data[i].text = res.data[i].nama
-					// })
-					// $('#provinsi').select2({
-					// 	theme: 'bootstrap4',
-					// 	width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-					// 	placeholder: $(this).data('placeholder'),
-					// 	allowClear: Boolean($(this).data('allow-clear')),
-					// 	data: res.data
-					// 	// [
-					// 	// {id:0,text:"enhancement"},
-					// 	// ],
-					// })
-			}
-		})
-	}
+	// function setSubKategori(param=''){
+	// 	$.post('{{route("sub_kategori.list")}}').done((res)=>{
+	// 		if(res.success){
+	// 			var html = '<option value="first" selected disabled>--Pilih Sub Kategori--</option>'
+	// 			$.each(res.data,(i,val)=>{
+	// 				var selected = ''
+	// 				if(val.id==param){
+	// 					selected = 'selected'
+	// 				}
+	// 				html += `<option value="${val.id}" ${selected}>${val.nama_subkategori}</option>`
+	// 			})
+	// 			$('#id_subkategori').html(html)
+	// 			// $.each(res.data,(i,val)=>{
+	// 				// 	res.data[i].text = res.data[i].nama
+	// 				// })
+	// 				// $('#provinsi').select2({
+	// 				// 	theme: 'bootstrap4',
+	// 				// 	width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+	// 				// 	placeholder: $(this).data('placeholder'),
+	// 				// 	allowClear: Boolean($(this).data('allow-clear')),
+	// 				// 	data: res.data
+	// 				// 	// [
+	// 				// 	// {id:0,text:"enhancement"},
+	// 				// 	// ],
+	// 				// })
+	// 		}
+	// 	})
+	// }
 
 	$('.single-select').select2({
 		theme: 'bootstrap4',

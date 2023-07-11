@@ -57,7 +57,7 @@
 								<tr>
 									<th>No</th>
 									<th>Kategori</th>
-									<th>Subkategori</th>
+									<!-- <th>Subkategori</th> -->
 									<th>Nama produk</th>
 									<th>Harga</th>
 									<th>Tags</th>
@@ -100,7 +100,7 @@
 				columns: [
 					{data:'DT_RowIndex', name:'DT_RowIndex'},
 					{data:'kategori', name:'kategori'},
-					{data:'sub_kateogori', name:'sub_kateogori'},
+					// {data:'sub_kateogori', name:'sub_kateogori'},
 					{data:'nama_produk', name:'nama_produk'},
 					{data:'harga', name:'harga', render:function(data,type,row){
 						return data ? formatRupiah(data,'Rp. ') : '-'

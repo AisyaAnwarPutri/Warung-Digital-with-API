@@ -82,7 +82,8 @@ class SliderController extends Controller{
 		}
 		return ['success' => false, 'code' => 500, 'message' => 'Produk gagal di ' . ($empty_id ? 'simpan' : 'perbarui')];
 	}
-	public function get(Request $request){
+
+	public function get(Request $request){ # Get for edit
 		$slider = Slider::find($request->id);
 		return $slider?['success'=>true,'data'=>$slider]:['success'=>false,'data'=>[]];
 	}
@@ -135,11 +136,5 @@ class SliderController extends Controller{
 			return ['success'=>false,'code'=>406,'message'=>'Slider gagal dihapus'];
 		}
 		return ['success'=>false,'code'=>204,'message'=>'Slider tidak ditemukan'];
-		// File::delete('uploads/' . $Slider->gambar);
-		// $Slider->delete();
-		// return response()->json([
-		// 	'success' => true,
-		// 	'message' => 'success'
-		// ]);
 	}
 }

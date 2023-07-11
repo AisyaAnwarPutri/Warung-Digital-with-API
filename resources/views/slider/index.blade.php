@@ -168,7 +168,8 @@
 	// });
 
 	$('.modal-tambah').click(()=>{
-		$('#modal-form').modal('show')
+      $('#modal-form').modal('show')
+      $('#id_slider').val('')
 		$('input[name="nama_slider"]').val('')
 		$('textarea[name="deskripsi"]').val('')
 		// $('.form-slider').submit(function(e) {
