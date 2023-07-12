@@ -21,4 +21,7 @@ class Product extends Model{
 	public function order_detail(){
 		return $this->hasMany(OrderDetail::class,'id_produk','id');
 	}
+	public function riwayat_stok(){
+		return $this->hasMany(RiwayatStok::class,'produk_id','id');
+	}
 }

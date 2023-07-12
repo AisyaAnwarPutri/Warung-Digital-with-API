@@ -13,6 +13,7 @@ use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\TestimoniController;
+use App\Http\Controllers\RiwayatStokController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -108,8 +109,14 @@ Route::controller(TentangController::class)
 		Route::post('store', 'store')->name('store');
 });
 # Produk end
-// Route::get('/tentang', [TentangController::class, 'index']);
-// Route::post('/tentang/{about}', [TentangController::class, 'update']);
+
+Route::controller(RiwayatStokController::class)
+	->prefix('riwayat-stok')
+	->as('riwayat_stok.')
+	->group(function(){
+		Route::get('/', 'index')->name('index');
+		// Route::post('store', 'store')->name('store');
+});
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 

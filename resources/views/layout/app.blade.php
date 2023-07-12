@@ -90,6 +90,12 @@
 				</a>
 			</li>
 			<li class="nav-item">
+				<a class="nav-link" href="{{route('riwayat_stok.index')}}">
+					<i class="fas fa-fw fa-globe"></i>
+					<span>Riwayat Stok</span>
+				</a>
+			</li>
+			<li class="nav-item">
 				<a class="nav-link" href="/logout">
 					<i class="fas fa-fw fa-sign-out-alt"></i>
 					<span>Logout</span>

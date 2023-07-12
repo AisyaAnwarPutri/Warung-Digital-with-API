@@ -12,14 +12,14 @@
 		<div id="owl-hero" class="owl-carousel owl-theme light-arrows slider-animated">
 			@if(count($slider)>0)
 			@foreach ($slider as $item)
-				<div class="hero-slide overlay" style="background-image:url(uploads/{{ $item->gambar }})">
+				<div class="hero-slide overlay" style="background-image:url('{{ asset('storage/'.$item->gambar) }}')">
 					<div class="container">
 					<div class="hero-holder">
 						<div class="hero-message">
 							<h1 class="hero-title nocaps">{{ $item->nama_slider }}</h1>
 							<h2 class="hero-subtitle lines">{{ $item->deskripsi }}</h2>
 							<div class="buttons-holder">
-							<a href="/front/#" class="btn btn-lg btn-transparent"><span>Belanja Sekarang</span></a>
+							<!-- <a href="/front/#" class="btn btn-lg btn-tra  nsparent"><span>Belanja Sekarang</span></a> -->
 							</div>
 						</div>
 					</div>

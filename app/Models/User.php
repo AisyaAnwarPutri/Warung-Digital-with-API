@@ -12,6 +12,10 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    
+    public function riwayat_stok(){
+		return $this->hasMany(RiwayatStok::class,'user_id','id');
+	}
 
     /**
      * The attributes that are mass assignable.

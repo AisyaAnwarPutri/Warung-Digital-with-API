@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Subcategory;
+use App\Models\RiwayatStok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use DataTables;
+use DataTables,Auth;
 
 class ProductController extends Controller{
 	public function __construct(){
@@ -53,7 +54,7 @@ class ProductController extends Controller{
 	public function form(Request $request){
 		if(isset($request->id)){
 			$data['page'] = 'Edit';
-			$data['product'] = Product::with('category','subcategory')->where('id',$request->id)->first();
+			$data['product'] = Product::with('category')->where('id',$request->id)->first();
 		}else{
 			$data['page'] = 'Tambah';
 			$data['product'] = '';
@@ -108,8 +109,22 @@ class ProductController extends Controller{
 		$dir        = $master.$namaGambar;
 		$path       = '/storage/'.$dir;
 
+		$user = Auth::user();
+		$userId = $user ? $user->id : '1';
+		$nama = $user ? "$user->name": '';
+		$riwayat = new RiwayatStok;
+		$riwayat->user_id = $userId;
+
 		$store = $empty_id ? new Product : Product::find($id_produk);
 		$store->id_kategori = $request->id_kategori;
+
+		$stokAwal = $empty_id ? $request->stok : $store->stok;
+		$stokTerbaru = $request->stok;
+		$stokUpdate = $stokTerbaru - $stokAwal;
+		$riwayat->stok_awal = $stokAwal;
+		$riwayat->stok_update = $stokUpdate;
+		$riwayat->stok_terbaru = $stokTerbaru;
+
 		$store->stok = $request->stok;
 		$store->nama_produk = $request->nama_produk;
 		$store->deskripsi = $request->deskripsi;
@@ -124,6 +139,9 @@ class ProductController extends Controller{
 			$store->gambar = $dir;
 		}
 		$store->save();
+		$riwayat->produk_id = $store->id;
+		$riwayat->tanggal = date('Y-m-d');
+		$riwayat->save();
 		if($store){
 			return ['success'=>true,'code'=>($empty_id?201:200),'message'=>'Produk berhasil di '.($empty_id?'simpan':'perbarui')];
 		}

@@ -15,6 +15,12 @@ class CreateRiwayatStoksTable extends Migration
     {
         Schema::create('riwayat_stoks', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
+            $table->integer('produk_id');
+            $table->integer('stok_awal')->nullable()->comment('Jumlah stok awal');
+            $table->integer('stok_update')->nullable()->comment('Selisih perubahan stok');
+            $table->integer('stok_terbaru')->nullable()->comment('Jumlah stok terbaru');
+            $table->date('tanggal');
             $table->timestamps();
         });
     }
