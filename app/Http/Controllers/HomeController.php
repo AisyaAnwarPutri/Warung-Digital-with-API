@@ -22,61 +22,158 @@ class HomeController extends Controller
 		if ($user = Auth::guard('webmember')->user()) {
 			$data['order'] = Order::withCount('order_detail')->where([
 				['id_member', $user->id],
-				['status', '=', ''],
+				['status', '=', ""],
 			])->first();
 		}
-		// return $data['order'];
 		return view('home.index', $data);
 	}
 
-	public function products()
+	public function products(Request $request, $id)
 	{
-		// $data['product'] = Product::where('id', $id)->first();
+		$data['products'] = Product::where('id_kategori', $id)->get();
+		$data['order'] = $data['carts'] = '';
+		if ($user = Auth::guard('webmember')->user()) {
+			$data['order'] = Order::withCount('order_detail')->where([
+				['id_member', $user->id],
+				['status', '=', ''],
+			])->first();
+		}
 		// $data['latest_products'] = Product::where('id', $id)->get();
-		return view('home.products');
+		return view('home.products',$data);
 	}
 
 	public function product(Request $request, $id)
 	{
-		$data['order'] = $data['carts'] = '';
+		$data['carts'] = '';
+		$data['order'] = '';
 		if ($user = Auth::guard('webmember')->user()) {
 			$data['order'] = Order::withCount('order_detail')->where([
 				['id_member', $user->id],
-				['status', '=', ''],
+				['status', '=', ""],
 			])->first();
 		}
+		// return $data['order'];
 		$data['product'] = Product::where('id', $id)->first();
 		return view('home.product', $data);
 	}
 
+	public function removeItem(Request $request){
+		if($detail = OrderDetail::find($request->id)){
+			$id = $detail->id_order;
+			// return ['success'=>true,'code'=>200,'message'=>'Data berhasil dihapus','id_order'=>$id];
+			if($detail->delete()){
+				return ['success'=>true,'code'=>200,'message'=>'Data berhasil dihapus','id_order'=>$id];
+			}
+			return ['success'=>false,'code'=>500,'message'=>'Data gagal dihapus'];
+		}
+		return ['success'=>false,'code'=>500,'message'=>'Data tidak ditemukan'];
+	}
+
 	public function cart(Request $request)
 	{
-		$data['order'] = $data['carts'] = '';
-		if ($user = Auth::guard('webmember')->user()) {
-			$data['order'] = Order::withCount('order_detail')->where([
-				['id_member', $user->id],
-				['status', '=', ''],
-			])->first();
-		}
+		$data['order'] = '';
+		$data['carts'] = '';
+		$user = Auth::guard('webmember')->user();
+		$data['order'] = Order::withCount('order_detail')->where([
+			['id_member', $user->id],
+			['status', '=', ""],
+		])->first();
 		if ($id = $request->id) {
 			$data['carts'] = OrderDetail::with('product')->where('id_order', $id)->get();
 		}
-		// return $data['carts'];
+			$merchantId = config('midtrans.merchant_id');
+			$clientKey = config('midtrans.client_key');
+			$serverKey = config('midtrans.server_key');
+			\Midtrans\Config::$serverKey = $serverKey;
+			// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+			\Midtrans\Config::$isProduction = false;
+			// Set sanitization on (default)
+			\Midtrans\Config::$isSanitized = true;
+			// Set 3DS transaction for credit card to true
+			\Midtrans\Config::$is3ds = true;
+			
+			$params = array(
+				'transaction_details' => array(
+					'order_id' => $data['order']->id,
+					'gross_amount' => $data['order']->grand_total,
+				),
+				'customer_details' => array(
+					'first_name' => $user->nama_member,
+					// 'last_name' => '',
+					'email' => $user->email,
+					'phone' => $user->no_hp,
+				),
+			);
+			$data['snapToken'] = \Midtrans\Snap::getSnapToken($params);
 		return view('home.cart', $data);
 	}
 
-	public function checkout()
+	public function checkout(Request $request)
 	{
-		return view('home.checkout');
+		$data = Order::with('order_detail')->where([
+			['id',$request->id],
+			['status',''],
+		])->first();
+		if($data){
+			return ['success'=>false,'code'=>406,'message'=>'Data tidak ditemukan'];
+		}
+		return ['success'=>false,'code'=>406,'message'=>'Data tidak ditemukan'];
+		// return $request->all();
+		// return view('home.checkout');
+	}
+
+	public function countKeranjang(Request $request){
+		// return $request->all();
+		if($data = Order::withCount('order_detail')->where([['id',$request->id],['status',""]])->first()){
+			return ['success'=>true,'code'=>200,'message'=>'Data found','data'=>$data];
+		}
+		return ['success'=>false,'code'=>500,'message'=>'Data not found'];
 	}
 
 	public function store_orders(Request $request)
 	{
-		return $request->all();
+		if($produk = Product::find($request->id_barang)){
+			// return ['success'=>true,'code'=>200,'message'=>'Produk berhasil ditambahkan'];
+			if($user = Auth::guard('webmember')->user()){
+				$count = Order::count()+1; # Nomor invoice
+				$findOrder = Order::where([
+					['status',""],
+					['id_member',$user->id],
+				])->first();
+				$order = $findOrder ? $findOrder : new Order;
+				$grand = $order->grand_total+$request->total; # Grand total awal + total baru
+				if(!$findOrder){
+					$order->id_member = $user->id;
+					$order->invoice = $count;
+					$order->status = ""; # Status ketika ditambahkan ke keranjang{Baru}
+				}
+				$order->grand_total = $grand;
+				$order->save();
+				$findDetail = OrderDetail::where([
+					['id_order',$order->id],
+					['id_produk',$request->id_barang],
+				])->first();
+				$detail = $findDetail ? $findDetail: new OrderDetail;
+				$jumlah = $detail->jumlah+$request->jumlah; # Jumlah awal + jumlah baru
+				$harga = $detail->harga+$request->total; # Total awal + total baru
+				if(!$findDetail){
+					$detail->id_order = $order->id;
+					$detail->id_produk = $request->id_barang;
+				}
+				$detail->jumlah = $jumlah;
+				$detail->harga = $harga;
+				$detail->save();
+				
+				return $order ? ['success'=>true,'code'=>200,'message'=>'Produk berhasil ditambahkan','data'=>$order] : ['success'=>false,'code'=>500,'message'=>'Produk gagal ditambahkan'];
+			}
+			return ['success'=>false,'code'=>500,'message'=>'Terjadi kesalahan sistem'];
+		}
+		return ['success'=>false,'code'=>500,'message'=>'Produk tidak ditemukan'];
 	}
 
 	public function orders()
 	{
+		// $data['orders'] = 
 		return view('home.orders');
 	}
 

@@ -122,7 +122,7 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 
 // Route untuk Beranda
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/products/{category}', [HomeController::class, 'product']);
+Route::get('/products/{id}', [HomeController::class, 'products']);
 Route::get('/product/{id}', [HomeController::class, 'product']);
 Route::get('/orders', [HomeController::class, 'orders']);
 Route::get('/cart', [HomeController::class, 'cart']);
@@ -132,8 +132,11 @@ Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/faq', [HomeController::class, 'faq']);
 
 Route::controller(HomeController::class)
-	// ->prefix('subkategori')
-	// ->as('sub_kategori.')
+	->as('home.')
 	->group(function(){
 		Route::post('store-orders', 'store_orders')->name('store_orders');
+		Route::post('keranjang', 'countKeranjang')->name('count_keranjang');
+		Route::post('remove-item', 'removeItem')->name('remove_item');
+		Route::post('checkout', 'checkout')->name('checkout');
+		Route::post('callback', 'callback')->name('callback');
 });

@@ -72,7 +72,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 						<a href="/products/{{$product->id_kategori}}">{{$product->category->nama_kategori}}</a>
 					</li>
 					<li class="active">
-                  {{$product->nama_produk}}
+						{{$product->nama_produk}}
 					</li>
 				</ol>
 				<h1 class="product-title">{{$product->nama_produk}}</h1>
@@ -87,18 +87,6 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 					<span>Stok:</span>
 					<span for="" style="margin-right: 20px">{{$product->stok}}</span>
 				</div>
-
-				{{--<div class="size-options clearfix">
-					<span>Size:</span>
-					@php
-					$sizes = explode(',',$product->ukuran);
-					@endphp
-
-					@foreach ($sizes as $size)
-					<input type="radio" name="sizes" id="{{$size}}" value="{{$size}}" class="size">
-					<label for="{{$size}}" style="margin-right: 20px">{{$size}}</label>
-					@endforeach
-				</div> --}}
 
 				<div class="product-actions">
 					<span>Qty:</span>
@@ -209,34 +197,78 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 @endsection
 
 @push('js')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script><!--sweetAlert-->
 <script>
-	 $(function(){
-		  $('.add-to-cart').click(function(e){
-				id_member = {{Auth::guard('webmember')->user()->id}}
-				id_barang = {{$product->id}}
-				jumlah = $('.jumlah').val()
-				total = {{$product->harga}}*jumlah
-				is_checkout = 0
-				$.ajax({
-					url : '{{route("store_orders")}}',
-					method : "POST",
-					headers: {
-						'X-CSRF-TOKEN': "{{csrf_token()}}",
-					},
-					data : {
-						id_member,
-						id_barang,
-						jumlah,
-						total,
-						is_checkout,
-					},
-					success : function(res){
-						console.log(res)
-						// window.location.href = '/cart'
-					}
-				});
-		  })
-	 })
+	$(function(){
+		$('.add-to-cart').click(function(e){
+			Swal.fire({
+				title: "Confirm",
+				text: "Ingin menambahkan produk ke keranjang?",
+				icon: "info",
+				showCancelButton: true,
+				reverseButtons: true,
+				confirmButtonColor: '#rgb(46 151 199)',
+				// cancelButtonColor: '#rgb(155 155 155)',
+				cancelButtonColor: '#rgb(155 155 155)',
+				confirmButtonText: "Ya!",
+				cancelButtonText: "Batal."
+			}).then((res)=>{
+				if(res.isConfirmed){
+					id_member = {{Auth::guard('webmember')->user()->id}}
+					id_barang = {{$product->id}}
+					jumlah = $('.jumlah').val()
+					total = {{$product->harga}}*jumlah
+					is_checkout = 0
+					$.ajax({
+						url : '{{route("home.store_orders")}}',
+						method : "POST",
+						headers: {
+							'X-CSRF-TOKEN': "{{csrf_token()}}",
+						},
+						data : {
+							id_member,
+							id_barang,
+							jumlah,
+							total,
+							is_checkout,
+						},
+						success : function(res){
+							if(res.success){
+								$.ajax({
+									url: '{{route("home.count_keranjang")}}',
+									method: 'POST',
+									headers: {
+										'X-CSRF-TOKEN': "{{csrf_token()}}",
+									},
+									data: {id: res.data.id}
+								}).done((res)=>{
+									if(res.success){
+										$('#keranjang').text(res.data.order_detail_count)
+									}
+								});
+								Swal.fire({
+									icon: 'success',
+									title: 'Berhasil',
+									text: res.message,
+									timer: 1000,
+									showConfirmButton: false,
+								});
+							}else{
+								Swal.fire({
+									icon: 'error',
+									title: 'Gagal',
+									text: res.message,
+									showConfirmButton: true,
+								});
+							}
+							// console.log(res)
+							// window.location.href = '/cart'
+						}
+					});
+				}
+			});
+		});
+	});
 
 </script>
 @endpush

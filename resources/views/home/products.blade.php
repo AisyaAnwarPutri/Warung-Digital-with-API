@@ -62,7 +62,7 @@
                                     </h3>
                                     <span class="category">
                                         <a
-                                            href="/products/{{$product->id_subkategori}}">{{$product->subcategory->nama_subkategori}}</a>
+                                        {{-- href="/products/{{$product->id_subkategori}}">{{$product->subcategory->nama_subkategori}}</a> --}}
                                     </span>
                                 </div>
 
