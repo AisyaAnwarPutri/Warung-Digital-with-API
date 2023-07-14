@@ -60,8 +60,14 @@ class HomeController extends Controller
 	public function removeItem(Request $request){
 		if($detail = OrderDetail::find($request->id)){
 			$id = $detail->id_order;
+			$hargaPerItem = $detail->harga;
 			// return ['success'=>true,'code'=>200,'message'=>'Data berhasil dihapus','id_order'=>$id];
 			if($detail->delete()){
+				if($order = Order::where('id',$id)->first()){
+					$grand = $order->grand_total - $hargaPerItem; # Ubah grand_total jika ada item yang di hapus di order_detail
+					$order->grand_total = $grand;
+					$order->save();
+				}
 				return ['success'=>true,'code'=>200,'message'=>'Data berhasil dihapus','id_order'=>$id];
 			}
 			return ['success'=>false,'code'=>500,'message'=>'Data gagal dihapus'];
@@ -71,40 +77,50 @@ class HomeController extends Controller
 
 	public function cart(Request $request)
 	{
-		$data['order'] = '';
-		$data['carts'] = '';
-		$user = Auth::guard('webmember')->user();
-		$data['order'] = Order::withCount('order_detail')->where([
-			['id_member', $user->id],
-			['status', '=', ""],
-		])->first();
-		if ($id = $request->id) {
-			$data['carts'] = OrderDetail::with('product')->where('id_order', $id)->get();
-		}
+		$order=$carts=$snapToken='';
+		if($user = Auth::guard('webmember')->user()){
+			$order = Order::withCount('order_detail')->where([
+				['id_member', $user->id],
+				['status', '=', ""],
+			])->first();
+			if ($id = $request->id) {
+				$carts = OrderDetail::with('product')->where('id_order', $id)->get();
+			}
+
 			$merchantId = config('midtrans.merchant_id');
 			$clientKey = config('midtrans.client_key');
 			$serverKey = config('midtrans.server_key');
-			\Midtrans\Config::$serverKey = $serverKey;
-			// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-			\Midtrans\Config::$isProduction = false;
-			// Set sanitization on (default)
-			\Midtrans\Config::$isSanitized = true;
-			// Set 3DS transaction for credit card to true
-			\Midtrans\Config::$is3ds = true;
-			
-			$params = array(
-				'transaction_details' => array(
-					'order_id' => $data['order']->id,
-					'gross_amount' => $data['order']->grand_total,
-				),
-				'customer_details' => array(
-					'first_name' => $user->nama_member,
-					// 'last_name' => '',
-					'email' => $user->email,
-					'phone' => $user->no_hp,
-				),
-			);
-			$data['snapToken'] = \Midtrans\Snap::getSnapToken($params);
+
+			if($order){
+				\Midtrans\Config::$serverKey = $serverKey;
+				// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+				\Midtrans\Config::$isProduction = false;
+				// Set sanitization on (default)
+				\Midtrans\Config::$isSanitized = true;
+				// Set 3DS transaction for credit card to true
+				\Midtrans\Config::$is3ds = true;
+				
+				$params = array(
+					'transaction_details' => array(
+						'order_id' => $order->id,
+						'gross_amount' => $order->grand_total,
+					),
+					'customer_details' => array(
+						'first_name' => $user->nama_member,
+						// 'last_name' => '',
+						'email' => $user->email,
+						'phone' => $user->no_hp,
+					),
+				);
+				$snapToken = \Midtrans\Snap::getSnapToken($params);
+			}
+		}
+
+		$data = [
+			'order' => $order,
+			'carts' => $carts,
+			'snapToken' => $snapToken,
+		];
 		return view('home.cart', $data);
 	}
 
@@ -191,5 +207,19 @@ class HomeController extends Controller
 	public function faq()
 	{
 		return view('home.faq');
+	}
+
+	public function callback(Request $request){
+		// return $request->all();
+		// $merchantId = config('midtrans.merchant_id');
+		// $clientKey = config('midtrans.client_key');
+		$serverKey = config('midtrans.server_key');
+		// $hashed = hash('sha512', $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+		// if($hashed==$request->signature_key){
+		// 	if($request->transaction_status=='capture'){
+		// 		return 'berhasil';
+		// 	}
+		// }
+		// return 'gagal';
 	}
 }

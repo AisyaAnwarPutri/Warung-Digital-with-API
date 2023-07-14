@@ -159,7 +159,7 @@
 										<div class="nav-cart-outer">
 											<div class="nav-cart-inner">
 												@if(!empty($user = Auth::guard('webmember')->user()))
-												<a href="/cart?id={{$order?$order->id:''}}" class="nav-cart-icon"><span style="font-size:15px;" id="keranjang">{{$order?$order->order_detail_count:0}}</span></a>
+												<a href="/cart?id={{$order?$order->id:''}}" class="nav-cart-icon" id="link-keranjang"><span style="font-size:15px;" id="keranjang">{{$order?$order->order_detail_count:0}}</span></a>
 												@endif
 											</div>
 										</div>

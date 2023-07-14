@@ -22,42 +22,48 @@
 							</thead>
 							<tbody>
 								@php $i=1;$id='' @endphp
-								@foreach ($carts as $key => $cart)
-								{{-- @dd($cart) --}}
-									<input type="hidden" name="id_produk[]" value="{{$cart->product?$cart->product->id:''}}">
-									<input type="hidden" name="jumlah[]" value="{{$cart->jumlah}}">
-									{{-- <input type="hidden" name="size[]" value="{{$cart->size}}">
-									<input type="hidden" name="color[]" value="{{$cart->color}}"> --}}
-									<input type="hidden" name="total[]" value="{{$cart->total}}">
-									<tr class="cart_item rowItem" id="rowItem{{$i}}">
-										<td class="product-thumbnail">
-											<a href="#">
-												<img src="/storage/{{$cart->product->gambar}}" alt="">
-											</a>
-										</td>
-										<td class="product-name">
-												<a href="javascript:void(0)">{{$cart->product->nama_produk}}</a>
-										</td>
-										<td class="product-price">
-												<span class="amount">{{ "Rp. " . number_format($cart->product->harga)}}</span>
-										</td>
-										<td class="product-quantity">
-												<span class="amount">{{ $cart->jumlah }}</span>
-										</td>
-										<td class="product-subtotal">
-												<span class="amount">{{ "Rp. " . number_format($cart->harga)}}</span>
-										</td>
-										<td class="product-remove">
-											{{-- <a href="/delete_from_cart/{{$cart->id}}" class="remove" title="Remove this item">
-												<i class="ui-close"></i>
-											</a> --}}
-											<a href="javascript:void(0)" class="remove" id="removeItem-{{$i}}" data-block="{{$i}}" data-id="{{$cart->id}}" title="Hapus item">
-												<i class="ui-close"></i>
-											</a>
-										</td>
+								@if($carts && count($carts)>0)
+									@forelse ($carts as $key => $cart)
+									{{-- @dd($carts) --}}
+										<input type="hidden" name="id_produk[]" value="{{$cart->product?$cart->product->id:''}}">
+										<input type="hidden" name="jumlah[]" value="{{$cart->jumlah}}">
+										{{-- <input type="hidden" name="size[]" value="{{$cart->size}}">
+										<input type="hidden" name="color[]" value="{{$cart->color}}"> --}}
+										<input type="hidden" name="total[]" value="{{$cart->total}}">
+										<tr class="cart_item rowItem" id="rowItem{{$i}}">
+											<td class="product-thumbnail">
+												<a href="#">
+													<img src="/storage/{{$cart->product->gambar}}" alt="">
+												</a>
+											</td>
+											<td class="product-name">
+													<a href="javascript:void(0)">{{$cart->product->nama_produk}}</a>
+											</td>
+											<td class="product-price">
+													<span class="amount">{{ "Rp. " . number_format($cart->product->harga)}}</span>
+											</td>
+											<td class="product-quantity">
+													<span class="amount">{{ $cart->jumlah }}</span>
+											</td>
+											<td class="product-subtotal">
+													<span class="amount">{{ "Rp. " . number_format($cart->harga)}}</span>
+											</td>
+											<td class="product-remove">
+												{{-- <a href="/delete_from_cart/{{$cart->id}}" class="remove" title="Remove this item">
+													<i class="ui-close"></i>
+												</a> --}}
+												<a href="javascript:void(0)" class="remove" id="removeItem-{{$i}}" data-block="{{$i}}" data-id="{{$cart->id}}" title="Hapus item">
+													<i class="ui-close"></i>
+												</a>
+											</td>
+										</tr>
+										@php $i++; $id=$cart->id_order @endphp
+									@endforeach
+								@else
+									<tr class="text-center">
+										<td colspan="5"><span><i>Anda belum memilih produk</i></span></td>
 									</tr>
-									@php $i++; $id=$cart->id_order @endphp
-								@endforeach
+								@endif
 							</tbody>
 						</table>
 					</div>
@@ -67,7 +73,9 @@
 						<div class="col-md-7">
 							<div class="actions">
 								<div class="wc-proceed-to-checkout">
+									@if($carts && count($carts)>0)
 									<a href="javascript:void(0)" class="btn btn-lg btn-dark checkout" data-id="{{$id}}" id="pay-button"><span>Bayar</span></a>
+									@endif
 								</div>
 							</div>
 						</div>
@@ -136,33 +144,35 @@
 @push('js')
 
 <script type="text/javascript"
-      src="https://app.sandbox.midtrans.com/snap/snap.js"
-      data-client-key="SET_YOUR_CLIENT_KEY_HERE"></script>
+		src="https://app.sandbox.midtrans.com/snap/snap.js"
+		data-client-key="SET_YOUR_CLIENT_KEY_HERE"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script><!--sweetAlert-->
 <script>
-	// For example trigger on button clicked, or any time you need
-	var payButton = document.getElementById('pay-button');
-	payButton.addEventListener('click', function () {
-	  // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-	  window.snap.pay('{{$snapToken}}', {
-		 onSuccess: function(result){
-			/* You may add your own implementation here */
-			alert("payment success!"); console.log(result);
-		 },
-		 onPending: function(result){
-			/* You may add your own implementation here */
-			alert("wating your payment!"); console.log(result);
-		 },
-		 onError: function(result){
-			/* You may add your own implementation here */
-			alert("payment failed!"); console.log(result);
-		 },
-		 onClose: function(){
-			/* You may add your own implementation here */
-			alert('you closed the popup without finishing the payment');
-		 }
-	  })
-	});
+	@if($carts && count($carts)>0)
+		// For example trigger on button clicked, or any time you need
+		var payButton = document.getElementById('pay-button');
+		payButton.addEventListener('click', function () {
+		// Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
+		window.snap.pay('{{$snapToken}}', {
+			onSuccess: function(result){
+				/* You may add your own implementation here */
+				alert("payment success!"); console.log(result);
+			},
+			onPending: function(result){
+				/* You may add your own implementation here */
+				alert("wating your payment!"); console.log(result);
+			},
+			onError: function(result){
+				/* You may add your own implementation here */
+				alert("payment failed!"); console.log(result);
+			},
+			onClose: function(){
+				/* You may add your own implementation here */
+				alert('you closed the popup without finishing the payment');
+			}
+		})
+		});
+	@endif
 
 	$(document).on('click','.remove',function(){
 		Swal.fire({

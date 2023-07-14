@@ -132,11 +132,12 @@ Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/faq', [HomeController::class, 'faq']);
 
 Route::controller(HomeController::class)
+	->prefix('home')
 	->as('home.')
 	->group(function(){
 		Route::post('store-orders', 'store_orders')->name('store_orders');
 		Route::post('keranjang', 'countKeranjang')->name('count_keranjang');
 		Route::post('remove-item', 'removeItem')->name('remove_item');
 		Route::post('checkout', 'checkout')->name('checkout');
-		Route::post('callback', 'callback')->name('callback');
+		// Route::post('callback', 'callback')->name('callback');
 });

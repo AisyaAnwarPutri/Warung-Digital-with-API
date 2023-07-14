@@ -244,6 +244,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 								}).done((res)=>{
 									if(res.success){
 										$('#keranjang').text(res.data.order_detail_count)
+                              $('#link-keranjang').attr("href", "/cart?id="+res.data.id)
 									}
 								});
 								Swal.fire({
