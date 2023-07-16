@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Helpers\Helpers;
 
+use App\Models\About;
 use App\Models\Product;
 use App\Models\Testimoni;
 use App\Models\Slider;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Category;
 
 
 class HomeController extends Controller
@@ -207,24 +209,46 @@ class HomeController extends Controller
 
 	public function orders()
 	{
-		// $data['orders'] = 
 		return view('home.orders');
 	}
 
 	public function about()
 	{
-		$testimoni = Testimoni::orderBy('id', 'DESC')->limit(3)->get();
-		return view('home.about', ['testimoni' => $testimoni]);
+		// $data['products'] = Product::where('id_kategori', $id)->get();
+		$data['order'] = $data['carts'] = '';
+		if ($user = Auth::guard('webmember')->user()) {
+			$data['order'] = Order::withCount('order_detail')->where([
+				['id_member', $user->id],
+				['status', '=', ''],
+			])->first();
+		}
+		$data['about'] = About::first();
+		return view('home.about', $data);
 	}
 
 	public function contact()
 	{
-		return view('home.contact');
+		$data['order'] = $data['carts'] = '';
+		if ($user = Auth::guard('webmember')->user()) {
+			$data['order'] = Order::withCount('order_detail')->where([
+				['id_member', $user->id],
+				['status', '=', ''],
+			])->first();
+		}
+		$data['about'] = About::first();
+		return view('home.contact',$data);
 	}
 
 	public function faq()
 	{
 		return view('home.faq');
+	}
+
+	public function category(Request $request,$id)
+	{
+		$data['category'] = Category::where('id', $id)->first();
+		$data['produk'] = Product::with('category')->where('id_kategori',$id)->get();
+		return view ('home.category', $data);
 	}
 
 	public function callback(Request $request){

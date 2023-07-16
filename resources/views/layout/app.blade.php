@@ -20,6 +20,7 @@
 
 	<!-- Custom styles for this template-->
 	<link href="/sbadmin2/css/sb-admin-2.min.css" rel="stylesheet">
+   <link rel="icon" href="{{ url('uploads/icon.png') }}" type="image/png" />
 	@stack('style')
 </head>
 
@@ -96,7 +97,7 @@
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{{route('riwayat_stok.index')}}">
-					<i class="fas fa-fw fa-globe"></i>
+					<i class="fa fa-history"></i>
 					<span>Riwayat Stok</span>
 				</a>
 			</li>

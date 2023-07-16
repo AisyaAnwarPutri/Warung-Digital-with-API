@@ -86,7 +86,7 @@
 								<div class="nav-cart mobile-cart hidden-lg hidden-md">
 									<div class="nav-cart-outer">
 										<div class="nav-cart-inner">
-												@if(!empty($user = Auth::guard('webmember')->user()))
+												@if(!empty($user = Auth::guard('webmember')->user()) && isset($order))
 												<a href="/cart?id={{$order?$order->id:''}}" class="nav-cart-icon" id="link-keranjang"><span style="font-size:15px;" id="keranjang">{{$order?$order->order_detail_count:0}}</span></a>
 												@endif
 											<!-- <a href="  -->
@@ -119,7 +119,7 @@
 																		@if(count($kategori)>0)
 																		@foreach($kategori as $key => $item)
 																		<li>
-																			<a href="javascript:void(0)">{{$item->nama_kategori}}</a>
+																			<a href="/category/{{$item->id}}">{{$item->nama_kategori}}</a>
 																		</li>
 																		@endforeach
 																		@endif
@@ -171,7 +171,7 @@
 									<li class="nav-cart">
 										<div class="nav-cart-outer">
 											<div class="nav-cart-inner">
-												@if(!empty($user = Auth::guard('webmember')->user()))
+												@if(!empty($user = Auth::guard('webmember')->user()) && isset($order))
 												<a href="/cart?id={{$order?$order->id:''}}" class="nav-cart-icon" id="link-keranjang"><span style="font-size:15px;" id="keranjang">{{$order?$order->order_detail_count:0}}</span></a>
 												@endif
 											</div>

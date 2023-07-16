@@ -114,7 +114,7 @@ Route::controller(OrderController::class)
 });
 # Pesanan end
 
-Route::get('/laporan', [ReportController::class, 'index']);
+Route::get('/laporan', [ReportController::class, 'index'])->name('laporan');
 # Produk start
 Route::controller(TentangController::class)
 	->prefix('tentang')
@@ -145,6 +145,7 @@ Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/about', [HomeController::class, 'about']);
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/faq', [HomeController::class, 'faq']);
+Route::get('/category/{id}', [HomeController::class, 'category']);
 
 Route::controller(HomeController::class)
 	->prefix('home')
