@@ -67,12 +67,12 @@
 				</a>
 				<div id="pesanan" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="/pesanan/baru">Pesanan Baru</a>
-						<a class="collapse-item" href="/pesanan/dikonfirmasi">Pesanan Dikonfirmasi</a>
-						<a class="collapse-item" href="/pesanan/dikemas">Pesanan Dikemas</a>
-						<a class="collapse-item" href="/pesanan/dikirim">Pesanan Dikirim</a>
-						<a class="collapse-item" href="/pesanan/diterima">Pesanan Diterima</a>
-						<a class="collapse-item" href="/pesanan/selesai">Pesanan Selesai</a>
+						<a class="collapse-item" href="{{route('pesanan.baru')}}">Pesanan Baru</a>
+						<a class="collapse-item" href="{{route('pesanan.konfirmasi')}}">Pesanan Dikonfirmasi</a>
+						<a class="collapse-item" href="{{route('pesanan.kemas')}}">Pesanan Dikemas</a>
+						<a class="collapse-item" href="{{route('pesanan.kirim')}}">Pesanan Dikirim</a>
+						<a class="collapse-item" href="{{route('pesanan.terima')}}">Pesanan Diterima</a>
+						<a class="collapse-item" href="{{route('pesanan.selesai')}}">Pesanan Selesai</a>
 					</div>
 				</div>
 			</li>

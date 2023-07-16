@@ -21,201 +21,98 @@ class OrderController extends Controller{
 	public function index()
 	{
 		$orders = Order::with('member')->get();
-
 		return response()->json([
 			'data' => $orders
 		]);
 	}
 
-	public function list()
-	{
-		return view('pesanan.index');
+	public function dataTable($statusAwal,$nextStatus){
+		$order = Order::with('member')->where('status',$statusAwal)->orderBy('id','DESC')->get();
+		return DataTables::of($order)
+			->addIndexColumn()
+			->addColumn('tanggal',function($row){
+				$text = $row->created_at ? date('d-m-Y',strtotime($row->created_at)) : '-';
+				return "<p class='text-center'>$text</p>";
+			})
+			->addColumn('member',function($row){
+				$text = $row->member ? ucwords(strtolower($row->member->nama_member)) : '-';
+				return "<p class='text-center'>$text</p>";
+			})
+			->addColumn('aksi',function($row)use($nextStatus){
+				$params = json_encode([$row->id,$nextStatus],true);
+				$text = 'Konfirmasi';
+				$title = 'Konfirmasi pesanan';
+				if($nextStatus=='Dikemas'){
+					$text = 'Kemas pesanan';
+					$title = 'Kemas pesanan';
+				}
+				if($nextStatus=='Dikirim'){
+					$text = 'Kirim pesanan';
+					$title = 'Kirim pesanan';
+				}
+				if($nextStatus=='Diterima'){
+					$text = 'Sudah diterima';
+					$title = 'Pesanan sudah diterima';
+				}
+				if($nextStatus=='Selesai'){
+					$text = 'Selesai';
+					$title = 'Selesaikan pesanan';
+				}
+				$txt = "
+					<button class='btn btn-sm editProduk btn-info' onclick='ubahStatus($params)' type='button' title='$title'>$text</button>
+				";
+				return $txt;
+			})->rawColumns(['tanggal','member','aksi'])->toJson();
 	}
+
 	public function baru(Request $request){
 		if(request()->ajax()){
-			$order = Order::with('member')->where('status','Baru')->orderBy('id','DESC')->get();
-			return DataTables::of($order)
-				->addIndexColumn()
-				->addColumn('tanggal',function($row){
-					$text = $row->created_at ? date('d-m-Y',strtotime($row->created_at)) : '-';
-					return "<p class='text-center'>$text</p>";
-				})
-				->addColumn('member',function($row){
-					$text = $row->member ? ucwords(strtolower($row->member->nama_member)) : '-';
-					return "<p class='text-center'>$text</p>";
-				})
-				->addColumn('aksi',function($row){
-					$txt = "
-						<button class='btn btn-sm editProduk btn-info' onclick='konfirmasi($row->id)' type='button' title='konfirmasi pesanan'>Konfirmasi</button>
-					";
-					return $txt;
-				})->rawColumns(['tanggal','member','aksi'])->toJson();
+			return $this->dataTable('Baru','Dikonfirmasi');
 		}
 		return view('pesanan.index');
 	}
-   public function ubahStatus(Request $request){
-      return $request->all();
-   }
 
-	public function dikonfirmasi_list()
-	{
+	public function konfirmasi(Request $request){
+		if(request()->ajax()){
+			return $this->dataTable('Dikonfirmasi','Dikemas');
+		}
 		return view('pesanan.dikonfirmasi');
 	}
 
-	public function dikemas_list()
-	{
+	public function kemas(Request $request){
+		if(request()->ajax()){
+			return $this->dataTable('Dikemas','Dikirim');
+		}
 		return view('pesanan.dikemas');
 	}
 
-	public function dikirim_list()
-	{
+	public function kirim(Request $request){
+		if(request()->ajax()){
+			return $this->dataTable('Dikirim','Diterima');
+		}
 		return view('pesanan.dikirim');
 	}
 
-	public function diterima_list()
-	{
+	public function terima(Request $request){
+		if(request()->ajax()){
+			return $this->dataTable('Diterima','Selesai');
+		}
 		return view('pesanan.diterima');
 	}
 
-	public function selesai_list()
-	{
+	public function selesai(Request $request){
+		if(request()->ajax()){
+			return $this->dataTable('Selesai','Dikemas');
+		}
 		return view('pesanan.selesai');
 	}
 
-	// public function store(Request $request)
-	// {
-	// 	$validator = Validator::make($request->all(), [
-	// 		'id_member' => 'required',
-	// 	]);
-
-	// 	if ($validator->fails()) {
-	// 		return response()->json(
-	// 				$validator->errors(), 422
-	// 		);
-	// 	}
-
-	// 	$input = $request->all();
-	// 	$Order = Order::create($input);
-
-	// 	for ($i=0; $i < count($input['id_produk']) ; $i++) { 
-	// 		OrderDetail::create([
-	// 				'id_order' => $Order['id'],
-	// 				'id_produk' => $input['id_produk'][$i],
-	// 				'jumlah' => $input['jumlah'][$i],
-	// 				'total' => $input['total'][$i]
-	// 		]);
-	// 	}
-
-	// 	return response()->json([
-	// 		'data' => $Order
-	// 	]);
-	// }
-
-	// public function show(Order $Order)
-	// {
-	// 	return response()->json([
-	// 		'data' => $Order
-	// 	]);
-	// }
-
-	// public function update(Request $request, Order $Order)
-	// {
-	// 	$validator = Validator::make($request->all(), [
-	// 		'id_member' => 'required',
-	// 	]);
-
-	// 	if ($validator->fails()) {
-	// 		return response()->json(
-	// 				$validator->errors(), 422
-	// 		);
-	// 	}
-
-	// 	$input = $request->all();
-	// 	$Order->update($input);
-
-	// 	OrderDetail::where('id_order', $Order['id'])->delete();
-
-	// 	for ($i=0; $i < count($input['id_produk']) ; $i++) { 
-	// 		OrderDetail::create([
-	// 				'id_order' => $Order['id'],
-	// 				'id_produk' => $input['id_produk'][$i],
-	// 				'jumlah' => $input['jumlah'][$i],
-	// 				'total' => $input['total'][$i]
-	// 		]);
-	// 	}
-
-	// 	return response()->json([
-	// 		'message' => 'success',
-	// 		'data' => $Order
-	// 	]);
-	// }
-
-	// public function ubah_status(Request $request, Order $order){
-	// 	$order->update([
-	// 		'status' => $request->status
-	// 	]);
-
-	// 	return response()->json([
-	// 		'message' => 'success',
-	// 		'data' => $order
-	// 	]);
-	// }
-
-	// public function baru()
-	// {
-	// 	$orders = Order::with('member')->where('status', 'Baru')->get();
-
-	// 	return response()->json([
-	// 		'data' => $orders
-	// 	]);
-	// }
-
-	// public function dikonfirmasi(){
-	// 	$orders = Order::with('member')->where('status', 'Dikonfirmasi')->get();
-
-	// 	return response()->json([
-	// 		'data' => $orders
-	// 	]);
-	// }
-
-	// public function dikemas(){
-	// 	$orders = Order::with('member')->where('status', 'Dikemas')->get();
-
-	// 	return response()->json([
-	// 		'data' => $orders
-	// 	]);
-	// }
-
-	// public function dikirim(){
-	// 	$orders = Order::with('member')->where('status', 'Dikirim')->get();
-
-	// 	return response()->json([
-	// 		'data' => $orders
-	// 	]);
-	// }
-
-	// public function diterima(){
-	// 	$orders = Order::with('member')->where('status', 'Diterima')->get();
-
-	// 	return response()->json([
-	// 		'data' => $orders
-	// 	]);
-	// }
-
-	// public function selesai(){
-	// 	$orders = Order::with('member')->where('status', 'Selesai')->get();
-
-	// 	return response()->json([
-	// 		'data' => $orders
-	// 	]);
-	// }
-
-	// public function destroy(Order $Order)
-	// {
-	// 	$Order->delete();
-
-	// 	return response()->json([
-	// 		'message' => 'success'
-	// 	]);
-	// }
+	public function ubah_status(Request $request){
+		if($order = Order::where('id',$request->id)->first()){
+			$order->status = $request->status;
+			$order->save();
+			return ['success'=>true,'message'=>'Perubahan status berhasil'];
+		}
+		return ['success'=>false,'message'=>'Data tidak ditemukan'];
+	}
 }

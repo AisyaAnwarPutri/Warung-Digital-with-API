@@ -110,6 +110,7 @@ Route::controller(OrderController::class)
 		Route::get('kirim', 'kirim')->name('kirim');
 		Route::get('terima', 'terima')->name('terima');
 		Route::get('selesai', 'selesai')->name('selesai');
+      Route::post('ubah-status','ubah_status')->name('ubah_status');
 });
 # Pesanan end
 

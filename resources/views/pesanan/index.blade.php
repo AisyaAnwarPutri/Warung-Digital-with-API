@@ -1,4 +1,5 @@
 @extends('layout.app')
+
 @section('title', 'Data Pesanan Baru')
 
 @push('style')
@@ -15,7 +16,7 @@
 	<div class="card-body">
 		<div class="table-responsive">
 			<table id="dataTable" class="text-center table table-bordered table-hover table-striped" style="width:100%">
-				<thead class="">
+				<thead>
 					<tr>
 						<th>No</th>
 						<th>Tanggal Pesanan</th>
@@ -25,7 +26,6 @@
 						<th>Aksi</th>
 					</tr>
 				</thead>
-				<tbody></tbody>
 			</table>
 		</div>
 	</div>
@@ -70,7 +70,7 @@
 		});
 	}
 	
-	function konfirmasi(id){
+	function ubahStatus(params){
 		Swal.fire({
 			title: "Anda yakin?",
 			text: "Ingin mengkonfirmasi pesanan ini!",
@@ -83,25 +83,25 @@
 			cancelButtonText: "Batal."
 		}).then((res)=>{
 			if(res.isConfirmed){
-				// $.post("{{route('produk.destroy_produk')}}",{id:id}).done((res)=>{
-				// 	if(res.success){
-				// 		Swal.fire({
-				// 			icon: 'success',
-				// 			title: 'Berhasil',
-				// 			text: res.message,
-				// 			timer: 1000,
-				// 			showConfirmButton: false,
-				// 		});
-				// 		$('#dataTable').DataTable().ajax.reload()
-				// 	}else{
-				// 		Swal.fire({
-				// 			icon: 'error',
-				// 			title: 'Gagal',
-				// 			text: res.message,
-				// 			showConfirmButton: true,
-				// 		});
-				// 	}
-				// });
+				$.post("{{route('pesanan.ubah_status')}}",{id:params[0],status:params[1]}).done((res)=>{
+					if(res.success){
+						Swal.fire({
+							icon: 'success',
+							title: 'Berhasil',
+							text: res.message,
+							timer: 1000,
+							showConfirmButton: false,
+						});
+						$('#dataTable').DataTable().ajax.reload()
+					}else{
+						Swal.fire({
+							icon: 'error',
+							title: 'Gagal',
+							text: res.message,
+							showConfirmButton: true,
+						});
+					}
+				});
 			}
 		});
 	}
@@ -122,63 +122,5 @@
 		rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah
 		return prefix == undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : ''
 	}
-
-	// $(function() {
-	// 	function rupiah(angka){
-	// 		const format = angka.toString().split('').reverse().join('');
-	// 		const convert = format.match(/\d{1,3}/g);
-	// 		return 'Rp ' + convert.join('.').split('').reverse().join('')
-	// 	}
-	// 	function date(date) {
-	// 		var date = new Date(date);
-	// 		var day = date.getDate(); //Date of the month: 2 in our example
-	// 		var month = date.getMonth(); //Month of the Year: 0-based index, so 1 in our example
-	// 		var year = date.getFullYear()
-	// 		return `${day}-${month}-${year}`;
-	// 	}
-
-	// 	const token = localStorage.getItem('token')
-	// 	$.ajax({
-	// 		url: '/api/pesanan/baru',
-	// 		headers: {
-	// 			"Authorization": 'Bearer ' + token
-	// 		},
-	// 		success: (data)=>{
-	// 			let row;
-	// 			data.map(function(val, index) {
-	// 				row += `
-	// 					<tr>
-	// 						<td>${index+1}</td>
-	// 						<td>${date(val.created_at)}</td>
-	// 						<td>${val.invoice}</td>
-	// 						<td>${val.member.nama_member}</td>
-	// 						<td>${rupiah(val.grand_total)}</td>
-	// 						<td>
-	// 							<a href="#" data-id="${val.id}" class="btn btn-success btn-aksi">Konfirmasi</a>
-	// 						</td>
-	// 					</tr>
-	// 					`;
-	// 			});
-	// 			$('tbody').append(row)
-	// 		}
-	// 	});
-
-	// 	$(document).on('click','.btn-aksi',function(){
-	// 		const id = $(this).data('id')
-	// 		$.ajax({
-	// 			url : '/api/pesanan/ubah_status/' + id,
-	// 			type : 'POST',
-	// 			data : {
-	// 				status : 'Dikonfirmasi'
-	// 			},
-	// 			headers: {
-	// 				"Authorization": 'Bearer ' + token
-	// 			},
-	// 			success : function(data){
-	// 				location.reload()
-	// 			}
-	// 		})
-	// 	})
-	// });
 </script>
 @endpush
