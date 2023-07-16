@@ -15,7 +15,7 @@
 	 </div>
 	 <div class="card-body">
 		  <div class="d-flex justify-content-end mb-4">
-				<a href="#modal-form" class="btn btn-success modal-tambah">Tambah Data</a>
+				<a href="javascript:void(0)" class="btn btn-success modal-tambah">Tambah Data</a>
 		  </div>
 		  <div class="table-responsive">
 				<table id="dataTable" class="table table-bordered table-striped text-center" style="width:100%">

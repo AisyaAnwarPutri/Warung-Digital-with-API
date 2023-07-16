@@ -88,28 +88,30 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 					<span for="" style="margin-right: 20px">{{$product->stok}}</span>
 				</div>
 
+				<!-- User Id Member -->
+				<input type="hidden" id="id_member" value="@if($user = Auth::guard('webmember')->user()){{$user->id}}@endif">
+
 				<div class="product-actions">
 					<span>Qty:</span>
 					<div class="quantity buttons_added">
-						<input type="number" step="1" min="0" value="1" title="Qty"
-								class="input-text jumlah qty text" />
+						<input type="number" step="1" min="0" value="1" title="Qty" class="input-text jumlah qty text" />
 						<div class="quantity-adjust">
-								<a href="#" class="plus">
-									<i class="fa fa-angle-up"></i>
-								</a>
-								<a href="#" class="minus">
-									<i class="fa fa-angle-down"></i>
-								</a>
+							<a href="#" class="plus">
+								<i class="fa fa-angle-up"></i>
+							</a>
+							<a href="#" class="minus">
+								<i class="fa fa-angle-down"></i>
+							</a>
 						</div>
 					</div>
-						<button type="button" class="btn btn-dark btn-lg add-to-cart"><span>Add to Cart</span></button>
-						<a href="#" class="product-add-to-wishlist"><i class="fa fa-heart"></i></a>
+						<button type="button" class="btn btn-dark btn-lg add-to-cart"><span>Tambah Keranjang</span></button>
+						<!-- <a href="#" class="product-add-to-wishlist"><i class="fa fa-heart"></i></a> -->
 					</div>
 
 					<div class="product_meta">
 						<!-- <span class="sku">SKU: <a href="#">{{$product->sku}}</a></span> -->
-						<span class="brand_as">Category: <a href="#">{{$product->category->nama_kategori}}</a></span>
-						<span class="posted_in">Tags: <a href="#">{{$product->tags}}</a></span>
+						<span class="brand_as">Kategori: <a href="#">{{$product->category->nama_kategori}}</a></span>
+						<span class="posted_in">Tag: <a href="#">{{$product->tags}}</a></span>
 					</div>
 
 					<!-- Accordion -->
@@ -117,7 +119,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 						<div class="panel">
 							<div class="panel-heading">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
-									class="minus">Description<span>&nbsp;</span>
+									class="minus">Deskripsi<span>&nbsp;</span>
 								</a>
 							</div>
 							<div id="collapseOne" class="panel-collapse collapse in">
@@ -129,13 +131,13 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 					</div>
 
 					<div class="socials-share clearfix">
-						<span>Share:</span>
+						<!-- <span>Share:</span>
 						<div class="social-icons nobase">
 							<a href="#"><i class="fa fa-twitter"></i></a>
 							<a href="#"><i class="fa fa-facebook"></i></a>
 							<a href="#"><i class="fa fa-google"></i></a>
 							<a href="#"><i class="fa fa-instagram"></i></a>
-						</div>
+						</div> -->
 					</div>
 				</div> <!-- end col product description -->
 			</div> <!-- end row -->
@@ -143,14 +145,13 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 	</div>
 </section> <!-- end single product -->
 
-
 <!-- Related Products -->
 <section class="section-wrap pt-0 shop-items-slider">
 	<div class="container">
 		<div class="row heading-row">
 			<div class="col-md-12 text-center">
 					<h2 class="heading bottom-line">
-						Latest Products
+                  Produk Terbaru
 					</h2>
 			</div>
 		</div>
@@ -163,17 +164,17 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 								<img src="/storage/{{$product->gambar}}" alt="">
 								<img src="/storage/{{$product->gambar}}" alt="" class="back-img">
 							</a>
-							<div class="product-label">
+							<!-- <div class="product-label">
 								<span class="sale">sale</span>
-							</div>
+							</div> -->
 							<div class="hover-2">
 								<div class="product-actions">
-									<a href="#" class="product-add-to-wishlist">
+									<!-- <a href="#" class="product-add-to-wishlist">
 										<i class="fa fa-heart"></i>
-									</a>
+									</a> -->
 								</div>
 							</div>
-							<a href="/product/{{$product->id}}" class="product-quickview">More</a>
+							<a href="/product/{{$product->id}}" class="product-quickview">Detail</a>
 						</div>
 						<div class="product-details">
 							<h3 class="product-title">
@@ -199,75 +200,96 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 @push('js')
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script><!--sweetAlert-->
 <script>
+	var user = "{{Auth::guard('webmember')->user()}}"
 	$(function(){
 		$('.add-to-cart').click(function(e){
-			Swal.fire({
-				title: "Confirm",
-				text: "Ingin menambahkan produk ke keranjang?",
-				icon: "info",
-				showCancelButton: true,
-				reverseButtons: true,
-				confirmButtonColor: '#rgb(46 151 199)',
-				// cancelButtonColor: '#rgb(155 155 155)',
-				cancelButtonColor: '#rgb(155 155 155)',
-				confirmButtonText: "Ya!",
-				cancelButtonText: "Batal."
-			}).then((res)=>{
-				if(res.isConfirmed){
-					id_member = {{Auth::guard('webmember')->user()->id}}
-					id_barang = {{$product->id}}
-					jumlah = $('.jumlah').val()
-					total = {{$product->harga}}*jumlah
-					is_checkout = 0
-					$.ajax({
-						url : '{{route("home.store_orders")}}',
-						method : "POST",
-						headers: {
-							'X-CSRF-TOKEN': "{{csrf_token()}}",
-						},
-						data : {
-							id_member,
-							id_barang,
-							jumlah,
-							total,
-							is_checkout,
-						},
-						success : function(res){
-							if(res.success){
-								$.ajax({
-									url: '{{route("home.count_keranjang")}}',
-									method: 'POST',
-									headers: {
-										'X-CSRF-TOKEN': "{{csrf_token()}}",
-									},
-									data: {id: res.data.id}
-								}).done((res)=>{
-									if(res.success){
-										$('#keranjang').text(res.data.order_detail_count)
-                              $('#link-keranjang').attr("href", "/cart?id="+res.data.id)
-									}
-								});
-								Swal.fire({
-									icon: 'success',
-									title: 'Berhasil',
-									text: res.message,
-									timer: 1000,
-									showConfirmButton: false,
-								});
-							}else{
-								Swal.fire({
-									icon: 'error',
-									title: 'Gagal',
-									text: res.message,
-									showConfirmButton: true,
-								});
+			id_member = $('#id_member').val()
+			if(id_member){
+				Swal.fire({
+					title: "Confirm",
+					text: "Ingin menambahkan produk ke keranjang?",
+					icon: "info",
+					showCancelButton: true,
+					reverseButtons: true,
+					confirmButtonColor: '#rgb(46 151 199)',
+					// cancelButtonColor: '#rgb(155 155 155)',
+					cancelButtonColor: '#rgb(155 155 155)',
+					confirmButtonText: "Ya!",
+					cancelButtonText: "Batal."
+				}).then((res)=>{
+					if(res.isConfirmed){
+						id_barang = {{$product->id}}
+						jumlah = $('.jumlah').val()
+						total = {{$product->harga}}*jumlah
+						is_checkout = 0
+						$.ajax({
+							url : '{{route("home.store_orders")}}',
+							method : "POST",
+							headers: {
+								'X-CSRF-TOKEN': "{{csrf_token()}}",
+							},
+							data : {
+								id_member,
+								id_barang,
+								jumlah,
+								total,
+								is_checkout,
+							},
+							success : function(res){
+								if(res.success){
+									$.ajax({
+										url: '{{route("home.count_keranjang")}}',
+										method: 'POST',
+										headers: {
+											'X-CSRF-TOKEN': "{{csrf_token()}}",
+										},
+										data: {id: res.data.id}
+									}).done((res)=>{
+										if(res.success){
+											$('.jumlah').val('1')
+											$('#keranjang').text(res.data.order_detail_count)
+											$('#link-keranjang').attr("href", "/cart?id="+res.data.id)
+										}
+									});
+									Swal.fire({
+										icon: 'success',
+										title: 'Berhasil',
+										text: res.message,
+										timer: 1000,
+										showConfirmButton: false,
+									});
+								}else{
+									Swal.fire({
+										icon: 'error',
+										title: 'Gagal',
+										text: res.message,
+										showConfirmButton: true,
+									});
+								}
+
+								// window.location.href = '/cart'
 							}
-							// console.log(res)
-							// window.location.href = '/cart'
-						}
-					});
-				}
-			});
+						});
+					}
+				});
+			}else{
+				Swal.fire({
+					title: "Whoops",
+					text: "Silahkan login terlebih dahulu.",
+					icon: "warning",
+					showCancelButton: true,
+					reverseButtons: true,
+					confirmButtonColor: '#rgb(46 151 199)',
+					// cancelButtonColor: '#rgb(155 155 155)',
+					cancelButtonColor: '#rgb(155 155 155)',
+					confirmButtonText: "Login.",
+					cancelButtonText: "Batal."
+				}).then((res)=>{
+					if(res.isConfirmed){
+						window.location.href = "/login_member";
+					}
+				});
+			}
 		});
 	});
 

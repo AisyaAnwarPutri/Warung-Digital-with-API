@@ -33,7 +33,7 @@
     </section> <!-- end promo section -->
 
     <!-- Testimonials -->
-    <section class="section-wrap testimonials">
+    <!-- <section class="section-wrap testimonials">
         <div class="container">
 
             <div class="row heading-row mb-20">
@@ -67,5 +67,6 @@
             </div>
         </div>
 
-    </section> <!-- end testimonials -->
+    </section> -->
+     <!-- end testimonials -->
 @endsection

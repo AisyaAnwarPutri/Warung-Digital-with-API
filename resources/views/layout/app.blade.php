@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<title>@yield('title')</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<meta name="csrf-token" content="{{csrf_token()}}"><!--csrfToken-->
-	<title>@yield('title')</title>
+
+	<!-- Hanya untuk https, jika menggunakan http, silahkan matikan tag html ini-->
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+	<!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+
 	<!-- Custom fonts for this template-->
 	<link href="/sbadmin2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
@@ -177,7 +182,10 @@
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			},
 		})
 	</script>
 	@stack('js')

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Helpers\Helpers;
+
 use App\Models\Product;
 use App\Models\Testimoni;
 use App\Models\Slider;
@@ -83,7 +85,7 @@ class HomeController extends Controller
 				['id_member', $user->id],
 				['status', '=', ""],
 			])->first();
-			if ($id = $request->id) {
+			if ($order && ($id = $request->id)) {
 				$carts = OrderDetail::with('product')->where('id_order', $id)->get();
 			}
 
@@ -139,7 +141,6 @@ class HomeController extends Controller
 	}
 
 	public function countKeranjang(Request $request){
-		// return $request->all();
 		if($data = Order::withCount('order_detail')->where([['id',$request->id],['status',""]])->first()){
 			return ['success'=>true,'code'=>200,'message'=>'Data found','data'=>$data];
 		}
@@ -149,7 +150,10 @@ class HomeController extends Controller
 	public function store_orders(Request $request)
 	{
 		if($produk = Product::find($request->id_barang)){
-			// return ['success'=>true,'code'=>200,'message'=>'Produk berhasil ditambahkan'];
+			if($request->jumlah > $produk->stok){
+				return ['success'=>false,'code'=>406,'message'=>"Stok produk tersisa $produk->stok",'data'=>$produk];
+			}
+			// return ['success'=>true,'code'=>200,'message'=>'Produk berhasil ditambahkan','data'=>$produk];
 			if($user = Auth::guard('webmember')->user()){
 				$count = Order::count()+1; # Nomor invoice
 				$findOrder = Order::where([
@@ -187,6 +191,20 @@ class HomeController extends Controller
 		return ['success'=>false,'code'=>500,'message'=>'Produk tidak ditemukan'];
 	}
 
+	public function validasiStok(Request $request){
+		if(count($orderDetail = OrderDetail::where('id_order',$request->id)->get()) > 0){
+			foreach($orderDetail as $key => $val){
+				if($produk = Product::where('id',$val->id_produk)->first()){
+					if($val->jumlah>$produk->stok){
+						return ['success'=>false,'code'=>400,'message'=>"Stok $produk->nama_produk tersisa $produk->stok",'data'=>$val];
+					}
+				}
+			}
+			return ['success'=>true,'code'=>200,'message'=>'Data ditemukan','data'=>''];
+		}
+		return ['success'=>false,'code'=>404,'message'=>'Data tidak ditemukan','data'=>''];
+	}
+
 	public function orders()
 	{
 		// $data['orders'] = 
@@ -210,16 +228,44 @@ class HomeController extends Controller
 	}
 
 	public function callback(Request $request){
-		// return $request->all();
 		// $merchantId = config('midtrans.merchant_id');
 		// $clientKey = config('midtrans.client_key');
 		$serverKey = config('midtrans.server_key');
-		// $hashed = hash('sha512', $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
-		// if($hashed==$request->signature_key){
-		// 	if($request->transaction_status=='capture'){
-		// 		return 'berhasil';
-		// 	}
-		// }
-		// return 'gagal';
+		$string = $request->order_id.$request->status_code.$request->gross_amount;
+		$hashed = hash('SHA512', $string.$serverKey); # Buat enskripsi string{signature_key} 
+		if($hashed==$request->signature_key){
+			$status = $request->transaction_status;
+			if(in_array($status,['capture','settlement'])){
+				$orderId = $request->order_id;
+				if($order = Order::where('id',$orderId)->first()){
+					$order->status = 'Baru';
+					$order->lunas = true;
+					$order->save();
+					if(count($orderDetail = OrderDetail::where('id_order',$orderId)->get()) > 0){ # Ambil semua data detail berdasarkan id order
+						foreach($orderDetail as $key => $val){
+							if($produk = Product::where('id',$val->id_produk)->first()){
+								$stokAkhir = $produk->stok - $val->jumlah; # Kurangi stok
+								$produk->stok = $stokAkhir;
+								$produk->save();
+							}
+						}
+					}
+				}
+				Helpers::logging([
+					'url'     => $request->url(),
+					'title'   => 'MIDTRANS CALLBACK SUCCESS',
+					'message' => 'Pembayaran berhasil',
+					'data'    => $request->all(),
+				]);
+				return true;
+			}
+		}
+		Helpers::logging([
+			'url'     => $request->url(),
+			'title'   => 'MIDTRANS CALLBACK FAILED',
+			'message' => 'Pembayaran gagal',
+			'data'    => $request->all(),
+		]);
+		return false;
 	}
 }

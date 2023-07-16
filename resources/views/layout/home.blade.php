@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<title>@yield('title', 'Beranda | Warung')</title>
-
 	<meta charset="utf-8">
-	<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- <meta charset="utf-8"> -->
+	<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> -->
+	<!-- <meta name="description" content=""> -->
+
+	<meta name="csrf-token" content="{{csrf_token()}}"><!--csrfToken-->
+	<!-- Hanya untuk https, jika menggunakan http, silahkan matikan tag html ini-->
+	<!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/> -->
+
+
 
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:400,400i,600,700' rel='stylesheet'>
-
 	<!-- Css -->
-	<link rel="stylesheet" href="/front/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="/front/css/magnific-popup.css" />
-	<link rel="stylesheet" href="/front/css/font-icons.css" />
-	<link rel="stylesheet" href="/front/css/sliders.css" />
-	<link rel="stylesheet" href="/front/css/style.css" />
-
+	<link rel="stylesheet" href="{{asset('front/css/bootstrap.min.css')}}" />
+	<link rel="stylesheet" href="{{asset('front/css/magnific-popup.css')}}" />
+	<link rel="stylesheet" href="{{asset('front/css/font-icons.css')}}" />
+	<link rel="stylesheet" href="{{asset('front/css/sliders.css')}}" />
+	<link rel="stylesheet" href="{{asset('front/css/style.css')}}" />
 	<!-- Favicons -->
-	<link rel="shortcut icon" href="/front/img/favicon.ico">
+	{{-- <link rel="shortcut icon" href="/front/img/favicon.ico"> --}}
 	<link rel="apple-touch-icon" href="/front/img/apple-touch-icon.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="/front/img/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="/front/img/apple-touch-icon-114x114.png">
+	<!-- icon web -->
+	<!-- <link rel="icon" href="/uploads/icon.png"> -->
+	<link rel="icon" href="{{ url('uploads/icon.png') }}" type="image/png" />
+	
 
 	<style>
 		.menu{
@@ -60,8 +72,8 @@
 							<div class="navbar-header flex-child">
 								<div class="logo-container">
 									<div class="logo-wrap">
-										<a href="/front/index.html">
-											<img class="logo-dark2" src="/front/img/logo_dark2 - .png" alt="logo">
+										<a href="/">
+											<img class="logo-dark2" src="/uploads/Logo.png" alt="logo">
 										</a>
 									</div>
 								</div>
@@ -74,9 +86,10 @@
 								<div class="nav-cart mobile-cart hidden-lg hidden-md">
 									<div class="nav-cart-outer">
 										<div class="nav-cart-inner">
-											<a href="/front/#" class="nav-cart-icon">
-												<span class="nav-cart-badge">2</span>
-											</a>
+												@if(!empty($user = Auth::guard('webmember')->user()))
+												<a href="/cart?id={{$order?$order->id:''}}" class="nav-cart-icon" id="link-keranjang"><span style="font-size:15px;" id="keranjang">{{$order?$order->order_detail_count:0}}</span></a>
+												@endif
+											<!-- <a href="  -->
 										</div>
 									</div>
 								</div>
@@ -173,7 +186,7 @@
 		</header>
 		<div class="content-wrapper oh">
 			@yield('content')
-			<section class="newsletter" id="subscribe">
+			<!-- <section class="newsletter" id="subscribe">
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-12 text-center">
@@ -185,7 +198,7 @@
 						</div>
 					</div>
 				</div>
-			</section>
+			</section> -->
 
 			<footer class="footer footer-type-1">
 				<div class="container">
@@ -193,58 +206,58 @@
 						<div class="row">
 							<div class="col-md-3 col-sm-12 col-xs-12">
 								<div class="widget footer-about-us">
-									<img src="/front/img/logo_dark.png" alt="" class="logo">
-									<p class="mb-30">Zenna Shop is a very slick and clean eCommerce template.</p>
+									<img src="/uploads/Logo.png" alt=""  style="height:68px; width:370px;">
+									<p class="mb-30">Warung Bumdes adalah platform yang menyediakan produk bumdes Kuala Alam.</p>
 									<div class="footer-socials">
 										<div class="social-icons nobase">
-											<a href="/front/#"><i class="fa fa-twitter"></i></a>
+											<!-- <a href="/front/#"><i class="fa fa-twitter"></i></a>
 											<a href="/front/#"><i class="fa fa-facebook"></i></a>
-											<a href="/front/#"><i class="fa fa-google-plus"></i></a>
+											<a href="/front/#"><i class="fa fa-google-plus"></i></a> -->
 										</div>
 									</div>
 								</div>
 							</div> <!-- end about us -->
 							<div class="col-md-2 col-md-offset-1 col-sm-6 col-xs-12">
 								<div class="widget footer-links">
-									<h5 class="widget-title bottom-line left-align grey">Information</h5>
+									<h5 class="widget-title bottom-line left-align grey">Informasi</h5>
 									<ul class="list-no-dividers">
-										<li><a href="/front/#">Our stores</a></li>
-										<li><a href="/front/#">About us</a></li>
-										<li><a href="/front/#">Business with us</a></li>
-										<li><a href="/front/#">Delivery information</a></li>
+										<li><a href="/front/#">Toko</a></li>
+										<li><a href="/front/#">Tentang</a></li>
+										<!-- <li><a href="/front/#">Business with us</a></li> -->
+										<li><a href="/front/#">Informasi Pengiriman</a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="col-md-2 col-sm-6 col-xs-12">
 								<div class="widget footer-links">
-									<h5 class="widget-title bottom-line left-align grey">Account</h5>
+									<h5 class="widget-title bottom-line left-align grey">Akun</h5>
 									<ul class="list-no-dividers">
-										<li><a href="/front/#">My account</a></li>
-										<li><a href="/front/#">Wishlist</a></li>
-										<li><a href="/front/#">Order history</a></li>
-										<li><a href="/front/#">Specials</a></li>
+										<li><a href="/front/#">Akun Saya</a></li>
+										<!-- <li><a href="/front/#">Wishlist</a></li> -->
+										<!-- <li><a href="/front/#">Order history</a></li> -->
+										<!-- <li><a href="/front/#">Specials</a></li> -->
 									</ul>
 								</div>
 							</div>
 							<div class="col-md-2 col-sm-6 col-xs-12">
 								<div class="widget footer-links">
-									<h5 class="widget-title bottom-line left-align grey">Useful Links</h5>
+									<h5 class="widget-title bottom-line left-align grey">Link</h5>
 									<ul class="list-no-dividers">
-										<li><a href="/front/#">Shipping Policy</a></li>
-										<li><a href="/front/#">Stores</a></li>
-										<li><a href="/front/#">Returns</a></li>
-										<li><a href="/front/#">Terms &amp; Conditions</a></li>
+										<!-- <li><a href="/front/#">Shipping Policy</a></li> -->
+										<!-- <li><a href="/front/#">Stores</a></li> -->
+										<!-- <li><a href="/front/#">Returns</a></li> -->
+										<li><a href="/front/#">Syarat &amp; Kondisi</a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="col-md-2 col-sm-6 col-xs-12">
 								<div class="widget footer-links">
-									<h5 class="widget-title bottom-line left-align grey">Service</h5>
+									<h5 class="widget-title bottom-line left-align grey">Layanan</h5>
 									<ul class="list-no-dividers">
-										<li><a href="/front/#">Support</a></li>
-										<li><a href="/front/#">Warranty</a></li>
-										<li><a href="/front/#">FAQ</a></li>
-										<li><a href="/front/#">Contact</a></li>
+										<!-- <li><a href="/front/#">Support</a></li> -->
+										<!-- <li><a href="/front/#">Warranty</a></li> -->
+										<li><a href="/front/#">F.A.Q</a></li>
+										<li><a href="/front/#">Kontak</a></li>
 									</ul>
 								</div>
 							</div>
@@ -256,7 +269,7 @@
 						<div class="row">
 							<div class="col-sm-6 copyright sm-text-center">
 								<span>
-									&copy; 2017 Zenna Theme, Made by <a href="http://deothemes.com">DeoThemes</a>
+									&copy; 2023 Warung Digital</a>
 								</span>
 							</div>
 							<div class="col-sm-6 col-xs-12 footer-payment-systems text-right sm-text-center mt-sml-10">
@@ -282,6 +295,16 @@
 	<script type="text/javascript" src="/front/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/front/js/plugins.js"></script>
 	<script type="text/javascript" src="/front/js/scripts.js"></script>
+	<script type="text/javascript">
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			},
+		})
+	</script>
 	@stack('js')
 </body>
 </html>

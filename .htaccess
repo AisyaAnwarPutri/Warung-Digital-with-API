@@ -1,15 +1,15 @@
 <IfModule mod_rewrite.c>
-RewriteEngine On
+   RewriteEngine On
 
-RewriteCond %{REQUEST_URI} !^public
-RewriteRule ^(.*)$ public/$1 [L]
-RewriteRule ^(.*).html$ public/$1 [L]
+   RewriteCond %{REQUEST_URI} !^public
+   RewriteRule ^(.*)$ public/$1 [L]
+   RewriteRule ^(.*).html$ public/$1 [L]
 
-RewriteRule ^index.php$ public/$1 [L]
-#redirect http to https
+   RewriteRule ^index.php$ public/$1 [L]
+   #redirect http to https
 
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-ReWriteCond %{SERVER_PORT} !^443$
- RewriteRule ^/(.*) https://%{HTTP_HOST}/$1 [NC,R,L]
+   RewriteCond %{HTTPS} off
+   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+   ReWriteCond %{SERVER_PORT} !^443$
+   RewriteRule ^/(.*) https://%{HTTP_HOST}/$1 [NC,R,L]
 </IfModule>

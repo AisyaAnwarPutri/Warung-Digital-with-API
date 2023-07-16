@@ -91,13 +91,27 @@ Route::get('/review', [ReviewController::class, 'list']);
 Route::get('/payment', [PaymentController::class, 'list']);
 
 // Pesanan
-Route::get('/pesanan/baru', [OrderController::class, 'list']);
-Route::get('/pesanan/dikonfirmasi', [OrderController::class, 'dikonfirmasi_list']);
-Route::get('/pesanan/dikemas', [OrderController::class, 'dikemas_list']);
-Route::get('/pesanan/dikirim', [OrderController::class, 'dikirim_list']);
-Route::get('/pesanan/diterima', [OrderController::class, 'diterima_list']);
-Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
-Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
+// Route::get('/pesanan/baru', [OrderController::class, 'list']);
+// Route::get('/pesanan/dikonfirmasi', [OrderController::class, 'dikonfirmasi_list']);
+// Route::get('/pesanan/dikemas', [OrderController::class, 'dikemas_list']);
+// Route::get('/pesanan/dikirim', [OrderController::class, 'dikirim_list']);
+// Route::get('/pesanan/diterima', [OrderController::class, 'diterima_list']);
+// Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
+// Route::get('/pesanan/selesai', [OrderController::class, 'selesai_list']);
+
+# Pesanan start
+Route::controller(OrderController::class)
+	->prefix('pesanan')
+	->as('pesanan.')
+	->group(function(){
+		Route::get('baru', 'baru')->name('baru');
+		Route::get('konfirmasi', 'konfirmasi')->name('konfirmasi');
+		Route::get('kemas', 'kemas')->name('kemas');
+		Route::get('kirim', 'kirim')->name('kirim');
+		Route::get('terima', 'terima')->name('terima');
+		Route::get('selesai', 'selesai')->name('selesai');
+});
+# Pesanan end
 
 Route::get('/laporan', [ReportController::class, 'index']);
 # Produk start
@@ -139,5 +153,6 @@ Route::controller(HomeController::class)
 		Route::post('keranjang', 'countKeranjang')->name('count_keranjang');
 		Route::post('remove-item', 'removeItem')->name('remove_item');
 		Route::post('checkout', 'checkout')->name('checkout');
+		Route::post('validasi-stok', 'validasiStok')->name('validasi_stok');
 		// Route::post('callback', 'callback')->name('callback');
 });

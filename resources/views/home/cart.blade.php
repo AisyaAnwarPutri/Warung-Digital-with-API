@@ -21,6 +21,7 @@
 								</tr>
 							</thead>
 							<tbody>
+								<input type="hidden" id="order_id" value="@if($order){{$order->id}}@endif">
 								@php $i=1;$id='' @endphp
 								@if($carts && count($carts)>0)
 									@forelse ($carts as $key => $cart)
@@ -32,21 +33,21 @@
 										<input type="hidden" name="total[]" value="{{$cart->total}}">
 										<tr class="cart_item rowItem" id="rowItem{{$i}}">
 											<td class="product-thumbnail">
-												<a href="#">
+												<a href="javascript:void(0)">
 													<img src="/storage/{{$cart->product->gambar}}" alt="">
 												</a>
 											</td>
 											<td class="product-name">
-													<a href="javascript:void(0)">{{$cart->product->nama_produk}}</a>
+												<a href="javascript:void(0)">{{$cart->product->nama_produk}}</a>
 											</td>
 											<td class="product-price">
-													<span class="amount">{{ "Rp. " . number_format($cart->product->harga)}}</span>
+												<span class="amount">{{ "Rp. " . number_format($cart->product->harga)}}</span>
 											</td>
 											<td class="product-quantity">
-													<span class="amount">{{ $cart->jumlah }}</span>
+												<span class="amount">{{ $cart->jumlah }}</span>
 											</td>
 											<td class="product-subtotal">
-													<span class="amount">{{ "Rp. " . number_format($cart->harga)}}</span>
+												<span class="amount">{{ "Rp. " . number_format($cart->harga)}}</span>
 											</td>
 											<td class="product-remove">
 												{{-- <a href="/delete_from_cart/{{$cart->id}}" class="remove" title="Remove this item">
@@ -144,33 +145,79 @@
 @push('js')
 
 <script type="text/javascript"
-		src="https://app.sandbox.midtrans.com/snap/snap.js"
-		data-client-key="SET_YOUR_CLIENT_KEY_HERE"></script>
+	src="https://app.sandbox.midtrans.com/snap/snap.js"
+	data-client-key="{{config('midtrans.client_key')}}"></script>
+		<!-- data-client-key="SET_YOUR_CLIENT_KEY_HERE"></script> -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script><!--sweetAlert-->
 <script>
 	@if($carts && count($carts)>0)
+		var id = $('#order_id').val();
 		// For example trigger on button clicked, or any time you need
 		var payButton = document.getElementById('pay-button');
-		payButton.addEventListener('click', function () {
-		// Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-		window.snap.pay('{{$snapToken}}', {
-			onSuccess: function(result){
-				/* You may add your own implementation here */
-				alert("payment success!"); console.log(result);
-			},
-			onPending: function(result){
-				/* You may add your own implementation here */
-				alert("wating your payment!"); console.log(result);
-			},
-			onError: function(result){
-				/* You may add your own implementation here */
-				alert("payment failed!"); console.log(result);
-			},
-			onClose: function(){
-				/* You may add your own implementation here */
-				alert('you closed the popup without finishing the payment');
-			}
-		})
+		payButton.addEventListener('click', ()=>{
+			$.ajax({
+				url: '{{route("home.validasi_stok")}}',
+				method: 'POST',
+				data: {id:id}
+			}).done((res)=>{
+				if(res.code==200){
+					// Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
+					window.snap.pay('{{$snapToken}}', {
+						onSuccess: function(result){
+							/* You may add your own implementation here */
+							// alert("payment success!"); console.log(result);
+							Swal.fire({
+								icon: 'success',
+								title: 'Success',
+								text: 'Pembayaran berhasil dilakukan!',
+								timer: 1000,
+								showConfirmButton: false,
+							});
+							setTimeout(()=>{
+								window.location.reload();
+							}, 1000);
+						},
+						onPending: function(result){
+							/* You may add your own implementation here */
+							// alert("wating your payment!"); console.log(result);
+							Swal.fire({
+								icon: 'info',
+								title: 'Info',
+								text: 'Menunggu pembayaran!',
+								showConfirmButton: true,
+							});
+						},
+						onError: function(result){
+							/* You may add your own implementation here */
+							// alert("payment failed!"); console.log(result);
+							Swal.fire({
+								icon: 'error',
+								title: 'Gagal',
+								text: 'Pembayaran gagal dilakukan',
+								showConfirmButton: true,
+							});
+						},
+						onClose: function(){ 
+							/* You may add your own implementation here */
+							// alert('you closed the popup without finishing the payment');
+						}
+					})
+				}else if(res.code==400){
+					Swal.fire({
+						icon: 'warning',
+						title: 'Whoops',
+						text: res.message,
+						showConfirmButton: true,
+					});
+				}else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Whoops',
+						text: res.message,
+						showConfirmButton: true,
+					});
+				}
+			});
 		});
 	@endif
 
@@ -251,24 +298,6 @@
 			// $('.btn-remove').removeClass('disabled')
 		})
 	})
-
-	// $('.checkout').click(function(e){
-	// 	var id = $(this).data('id')
-	// 	e.preventDefault()
-	// 	$.ajax({
-	// 		url : '{{route("home.checkout")}}',
-	// 		method : 'POST',
-	// 		data : {id:id},
-	// 		headers: {
-	// 			'X-CSRF-TOKEN': "{{csrf_token()}}",
-	// 		},
-	// 		// success : function(){
-	// 		// 	// location.href = '/checkout'
-	// 		// }
-	// 	}).done((res)=>{
-	// 		console.log(res)
-	// 	});
-	// });
 
 	$(function(){
 		$('.provinsi').change(function(){

@@ -17,6 +17,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('midtrans-callback',[HomeController::class,'callback']);
+// Route::post('/foo',function(){
+//    return 'tes';
+// });
 // Route::group([
 //     'middleware' => 'api',
 //     'prefix' => 'auth'

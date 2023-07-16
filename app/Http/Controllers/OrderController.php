@@ -7,238 +7,215 @@ use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use DataTables;
 
 class OrderController extends Controller{
-    public function __construct()
-    {
-      //   $this->middleware('auth')->only(['list', 'dikonfirmasi_list', 'dikemas_list', 'dikirim_list', 'diterima_list', 'selesai_list']);
-      //   $this->middleware('auth:api')->only(['store', 'update', 'destroy', 'ubah_status', 'baru', 'dikonfirmasi', 'dikemas', 'dikirim', 'diterima', 'selesai']);
-    }
+	public function __construct()
+	{
+	//   $this->middleware('auth')->only(['list', 'dikonfirmasi_list', 'dikemas_list', 'dikirim_list', 'diterima_list', 'selesai_list']);
+	//   $this->middleware('auth:api')->only(['store', 'update', 'destroy', 'ubah_status', 'baru', 'dikonfirmasi', 'dikemas', 'dikirim', 'diterima', 'selesai']);
+	}
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $orders = Order::with('member')->get();
 
-        return response()->json([
-            'data' => $orders
-        ]);
-    }
 
-    public function list()
-    {
-        return view('pesanan.index');
-    }
+	public function index()
+	{
+		$orders = Order::with('member')->get();
 
-    public function dikonfirmasi_list()
-    {
-        return view('pesanan.dikonfirmasi');
-    }
+		return response()->json([
+			'data' => $orders
+		]);
+	}
 
-    public function dikemas_list()
-    {
-        return view('pesanan.dikemas');
-    }
+	public function list()
+	{
+		return view('pesanan.index');
+	}
+	public function baru(Request $request){
+		if(request()->ajax()){
+			$order = Order::with('member')->where('status','Baru')->orderBy('id','DESC')->get();
+			return DataTables::of($order)
+				->addIndexColumn()
+				->addColumn('tanggal',function($row){
+					$text = $row->created_at ? date('d-m-Y',strtotime($row->created_at)) : '-';
+					return "<p class='text-center'>$text</p>";
+				})
+				->addColumn('member',function($row){
+					$text = $row->member ? ucwords(strtolower($row->member->nama_member)) : '-';
+					return "<p class='text-center'>$text</p>";
+				})
+				->addColumn('aksi',function($row){
+					$txt = "
+						<button class='btn btn-sm editProduk btn-info' onclick='konfirmasi($row->id)' type='button' title='konfirmasi pesanan'>Konfirmasi</button>
+					";
+					return $txt;
+				})->rawColumns(['tanggal','member','aksi'])->toJson();
+		}
+		return view('pesanan.index');
+	}
+   public function ubahStatus(Request $request){
+      return $request->all();
+   }
 
-    public function dikirim_list()
-    {
-        return view('pesanan.dikirim');
-    }
+	public function dikonfirmasi_list()
+	{
+		return view('pesanan.dikonfirmasi');
+	}
 
-    public function diterima_list()
-    {
-        return view('pesanan.diterima');
-    }
+	public function dikemas_list()
+	{
+		return view('pesanan.dikemas');
+	}
 
-    public function selesai_list()
-    {
-        return view('pesanan.selesai');
-    }
+	public function dikirim_list()
+	{
+		return view('pesanan.dikirim');
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	public function diterima_list()
+	{
+		return view('pesanan.diterima');
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id_member' => 'required',
-        ]);
+	public function selesai_list()
+	{
+		return view('pesanan.selesai');
+	}
 
-        if ($validator->fails()) {
-            return response()->json(
-                $validator->errors(), 422
-            );
-        }
+	// public function store(Request $request)
+	// {
+	// 	$validator = Validator::make($request->all(), [
+	// 		'id_member' => 'required',
+	// 	]);
 
-        $input = $request->all();
-        $Order = Order::create($input);
+	// 	if ($validator->fails()) {
+	// 		return response()->json(
+	// 				$validator->errors(), 422
+	// 		);
+	// 	}
 
-        for ($i=0; $i < count($input['id_produk']) ; $i++) { 
-            OrderDetail::create([
-                'id_order' => $Order['id'],
-                'id_produk' => $input['id_produk'][$i],
-                'jumlah' => $input['jumlah'][$i],
-                'total' => $input['total'][$i]
-            ]);
-        }
+	// 	$input = $request->all();
+	// 	$Order = Order::create($input);
 
-        return response()->json([
-            'data' => $Order
-        ]);
-    }
+	// 	for ($i=0; $i < count($input['id_produk']) ; $i++) { 
+	// 		OrderDetail::create([
+	// 				'id_order' => $Order['id'],
+	// 				'id_produk' => $input['id_produk'][$i],
+	// 				'jumlah' => $input['jumlah'][$i],
+	// 				'total' => $input['total'][$i]
+	// 		]);
+	// 	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Order  $Order
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Order $Order)
-    {
-        return response()->json([
-            'data' => $Order
-        ]);
-    }
+	// 	return response()->json([
+	// 		'data' => $Order
+	// 	]);
+	// }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Order  $Order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Order $Order)
-    {
-        //
-    }
+	// public function show(Order $Order)
+	// {
+	// 	return response()->json([
+	// 		'data' => $Order
+	// 	]);
+	// }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $Order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $Order)
-    {
-        $validator = Validator::make($request->all(), [
-            'id_member' => 'required',
-        ]);
+	// public function update(Request $request, Order $Order)
+	// {
+	// 	$validator = Validator::make($request->all(), [
+	// 		'id_member' => 'required',
+	// 	]);
 
-        if ($validator->fails()) {
-            return response()->json(
-                $validator->errors(), 422
-            );
-        }
+	// 	if ($validator->fails()) {
+	// 		return response()->json(
+	// 				$validator->errors(), 422
+	// 		);
+	// 	}
 
-        $input = $request->all();
-        $Order->update($input);
+	// 	$input = $request->all();
+	// 	$Order->update($input);
 
-        OrderDetail::where('id_order', $Order['id'])->delete();
+	// 	OrderDetail::where('id_order', $Order['id'])->delete();
 
-        for ($i=0; $i < count($input['id_produk']) ; $i++) { 
-            OrderDetail::create([
-                'id_order' => $Order['id'],
-                'id_produk' => $input['id_produk'][$i],
-                'jumlah' => $input['jumlah'][$i],
-                'total' => $input['total'][$i]
-            ]);
-        }
+	// 	for ($i=0; $i < count($input['id_produk']) ; $i++) { 
+	// 		OrderDetail::create([
+	// 				'id_order' => $Order['id'],
+	// 				'id_produk' => $input['id_produk'][$i],
+	// 				'jumlah' => $input['jumlah'][$i],
+	// 				'total' => $input['total'][$i]
+	// 		]);
+	// 	}
 
-        return response()->json([
-            'message' => 'success',
-            'data' => $Order
-        ]);
-    }
+	// 	return response()->json([
+	// 		'message' => 'success',
+	// 		'data' => $Order
+	// 	]);
+	// }
 
-    public function ubah_status(Request $request, Order $order){
-        $order->update([
-            'status' => $request->status
-        ]);
+	// public function ubah_status(Request $request, Order $order){
+	// 	$order->update([
+	// 		'status' => $request->status
+	// 	]);
 
-        return response()->json([
-            'message' => 'success',
-            'data' => $order
-        ]);
-    }
+	// 	return response()->json([
+	// 		'message' => 'success',
+	// 		'data' => $order
+	// 	]);
+	// }
 
-    public function baru()
-    {
-        $orders = Order::with('member')->where('status', 'Baru')->get();
+	// public function baru()
+	// {
+	// 	$orders = Order::with('member')->where('status', 'Baru')->get();
 
-        return response()->json([
-            'data' => $orders
-        ]);
-    }
+	// 	return response()->json([
+	// 		'data' => $orders
+	// 	]);
+	// }
 
-    public function dikonfirmasi(){
-        $orders = Order::with('member')->where('status', 'Dikonfirmasi')->get();
+	// public function dikonfirmasi(){
+	// 	$orders = Order::with('member')->where('status', 'Dikonfirmasi')->get();
 
-        return response()->json([
-            'data' => $orders
-        ]);
-    }
+	// 	return response()->json([
+	// 		'data' => $orders
+	// 	]);
+	// }
 
-    public function dikemas(){
-        $orders = Order::with('member')->where('status', 'Dikemas')->get();
+	// public function dikemas(){
+	// 	$orders = Order::with('member')->where('status', 'Dikemas')->get();
 
-        return response()->json([
-            'data' => $orders
-        ]);
-    }
+	// 	return response()->json([
+	// 		'data' => $orders
+	// 	]);
+	// }
 
-    public function dikirim(){
-        $orders = Order::with('member')->where('status', 'Dikirim')->get();
+	// public function dikirim(){
+	// 	$orders = Order::with('member')->where('status', 'Dikirim')->get();
 
-        return response()->json([
-            'data' => $orders
-        ]);
-    }
+	// 	return response()->json([
+	// 		'data' => $orders
+	// 	]);
+	// }
 
-    public function diterima(){
-        $orders = Order::with('member')->where('status', 'Diterima')->get();
+	// public function diterima(){
+	// 	$orders = Order::with('member')->where('status', 'Diterima')->get();
 
-        return response()->json([
-            'data' => $orders
-        ]);
-    }
+	// 	return response()->json([
+	// 		'data' => $orders
+	// 	]);
+	// }
 
-    public function selesai(){
-        $orders = Order::with('member')->where('status', 'Selesai')->get();
+	// public function selesai(){
+	// 	$orders = Order::with('member')->where('status', 'Selesai')->get();
 
-        return response()->json([
-            'data' => $orders
-        ]);
-    }
+	// 	return response()->json([
+	// 		'data' => $orders
+	// 	]);
+	// }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order  $Order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $Order)
-    {
-        $Order->delete();
+	// public function destroy(Order $Order)
+	// {
+	// 	$Order->delete();
 
-        return response()->json([
-            'message' => 'success'
-        ]);
-    }
+	// 	return response()->json([
+	// 		'message' => 'success'
+	// 	]);
+	// }
 }
