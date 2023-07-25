@@ -4,7 +4,6 @@
 @push('style')
 <link href="{{asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" />
 <link href="{{asset('assets/fontawesome/css/all.min.css')}}" rel="stylesheet" />
-
 @endpush
 
 @section('content')

@@ -50,7 +50,7 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="product-item hover-trigger">
 							<div class="product-img">
-								<a href="/front/shop-single.html">
+								<a href="javascript:void(0)">
                            @if(file_exists(public_path().'/storage/'.$item->gambar))
 									<img src="{{ asset('storage/'.$item->gambar) }}" alt="" width="300" height="300" style="width:auto; height:30%;">
                            @else
@@ -62,7 +62,7 @@
 								</div> -->
 								<div class="hover-overlay">                    
 									<div class="product-actions">
-										<a href="/front" class="product-add-to-wishlist">
+										<a href="javascript:void(0)" class="product-add-to-wishlist">
 											<!-- <i class="fa fa-heart"></i> -->
 										</a>
 									</div>

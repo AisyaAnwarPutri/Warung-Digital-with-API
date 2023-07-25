@@ -20,7 +20,7 @@
                     </div>
 
                     <textarea name="comment" id="comment" placeholder="Message" rows="9"></textarea>
-                    <input type="submit" class="btn btn-lg btn-dark btn-submit" value="Send message"
+                    <input type="submit" class="btn btn-lg btn-dark btn-submit" value="Kirim Pesan"
                         id="submit-message">
                     <div id="msg" class="message"></div>
                 </form>

@@ -1,6 +1,6 @@
 @extends('layout.home')
 
-@section('title', 'Checkout')
+@section('title', 'Pem')
 
 @section('content')
     <!-- Checkout -->

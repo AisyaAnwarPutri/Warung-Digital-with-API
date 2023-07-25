@@ -126,6 +126,9 @@
                         if (data.success) {
                             window.location.href = '/dashboard';
                         }
+                    },
+                    error : function(data){
+                        alert ("Email dan Password harus diisi.");
                     }
                 });
             });

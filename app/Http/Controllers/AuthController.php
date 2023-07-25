@@ -94,23 +94,48 @@ class AuthController extends Controller{
 	}
 
 	public function register_member_action(Request $request){
+		// return $request->all();
 		$validator = Validator::make($request->all(), [
 			'nama_member' => 'required',
+			'provinsi' => 'required',
+			'kabupaten' => 'required',
+			'kecamatan' => 'required',
+			'detail_alamat' => 'required',
 			'no_hp' => 'required',
 			'email' => 'required|email',
-			'password' => 'required|same:konfirmasi_password',
+			// 'password' => 'required|same:konfirmasi_password',
+			'password' => 'required',
 			'konfirmasi_password' => 'required|same:password',
+		],[
+			'nama_member.required' => 'Nama member harus diisi',
+			'provinsi.required' => 'Provinsi harus diisi',
+			'kabupaten.required' => 'Kabupaten harus diisi',
+			'kecamatan.required' => 'Kecamatan harus diisi',
+			'detail_alamat.required' => 'Alamat lengkap harus diisi',
+			'no_hp.required' => 'No HP harus diisi',
+			'email.required' => 'Email harus diisi',
+			'email.email' => 'Email tidak valid',
+			'password.required' => 'Password harus diisi',
+			'konfirmasi_password.required' => 'Konfirmasi password harus diisi',
+			'konfirmasi_password.same' => 'Password tidak sama',
 		]);
 		if ($validator->fails()) {
-			Session::flash('errors', $validator->errors()->toArray());
-			return redirect('/register_member');
+			$msg = '';
+			foreach ($validator->errors()->toArray() as $key => $value) {
+				$msg = $value[0]; break;
+			}
+			return ['success'=>false, 'message'=>$msg];
+			// Session::flash('errors', $validator->errors()->toArray());
+			// Session::flash('errors', $msg);
+			// return redirect('/register_member');
 		}
 		$input = $request->all();
 		$input['password'] = Hash::make($request->password);
 		unset($input['konfirmasi_password']);
 		Member::create($input);
-		Session::flash('success', 'Akun Berhasil Dibuat!');
-		return redirect('/login_member');
+		// Session::flash('success', 'Akun Berhasil Dibuat!');
+		return ['success'=>true, 'message'=>'Akun berhasil dibuat'];
+		// return redirect('/login_member');
 	}
 
 	public function logout(){

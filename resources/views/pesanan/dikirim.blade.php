@@ -8,11 +8,11 @@
 @endpush
 @section('content')
 <div class="card shadow">
-	<div class="card-header">
+	{{-- <div class="card-header">
 		<h4 class="card-title">
 			Data Pesanan Dikirim
 		</h4>
-	</div>
+	</div> --}}
 	<div class="card-body">
 		<div class="table-responsive">
 			<table id="dataTable" class="text-center table table-bordered table-hover table-striped" style="width:100%">
@@ -21,7 +21,11 @@
 						<th>No</th>
 						<th>Tanggal Pesanan</th>
 						<th>Invoice</th>
+						<th>Nama Produk</th>
 						<th>Member</th>
+						<th>Alamat</th>
+						<th>kabupaten</th>
+						<th>Provinsi</th>
 						<th>Total</th>
 						<th>Aksi</th>
 					</tr>
@@ -60,7 +64,11 @@
 				{data:'DT_RowIndex', name:'DT_RowIndex'},
 				{data:'tanggal', name:'tanggal'},
 				{data:'invoice', name:'invoice'},
+				{data:'nama_produk', name:'nama_produk'},
 				{data:'member', name:'member'},
+				{data:'alamat', name:'alamat'},
+				{data:'kabupaten', name:'kabupaten'},
+				{data:'provinsi', name:'provinsi'},
 				{data:'grand_total', name:'grand_total', render:function(data,type,row){
 					return '<p class="text-center">'+formatRupiah(data,'Rp. ')+'</p>'
 				}},

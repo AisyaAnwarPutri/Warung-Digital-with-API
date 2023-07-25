@@ -1,6 +1,6 @@
 @extends('layout.home')
 
-@section('title', 'Product')
+@section('title', 'Produk')
 
 @section('content')
 
@@ -146,7 +146,7 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 </section> <!-- end single product -->
 
 <!-- Related Products -->
-<section class="section-wrap pt-0 shop-items-slider">
+{{-- <section class="section-wrap pt-0 shop-items-slider">
 	<div class="container">
 		<div class="row heading-row">
 			<div class="col-md-12 text-center">
@@ -194,7 +194,8 @@ $url_image = ($product && $product->gambar) ? ('/storage/'.$product->gambar) : '
 			</div> <!-- end slider -->
 		</div>
 	</div>
-</section> <!-- end related products -->
+</section>  --}}
+<!-- end related products -->
 @endsection
 
 @push('js')

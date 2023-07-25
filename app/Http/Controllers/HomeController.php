@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 use App\Helpers\Helpers;
 
@@ -14,6 +15,7 @@ use App\Models\Slider;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Category;
+use App\Models\Member;
 
 
 class HomeController extends Controller
@@ -21,10 +23,10 @@ class HomeController extends Controller
 	public function index()
 	{
 		$data['slider'] = Slider::orderBy('id', 'DESC')->limit(3)->get();
-		$data['product'] = Product::orderBy('id', 'ASC')->limit(8)->get();
+		$data['product'] = Product::orderBy('id', 'DESC')->limit(8)->get();
 		$data['order'] = '';
 		if ($user = Auth::guard('webmember')->user()) {
-			$data['order'] = Order::withCount('order_detail')->where([
+			$data['order'] = Order::has('order_detail.product')->withCount('order_detail')->where([
 				['id_member', $user->id],
 				['status', '=', ""],
 			])->first();
@@ -51,7 +53,7 @@ class HomeController extends Controller
 		$data['carts'] = '';
 		$data['order'] = '';
 		if ($user = Auth::guard('webmember')->user()) {
-			$data['order'] = Order::withCount('order_detail')->where([
+			$data['order'] = Order::has('order_detail.product')->withCount('order_detail')->where([
 				['id_member', $user->id],
 				['status', '=', ""],
 			])->first();
@@ -83,12 +85,13 @@ class HomeController extends Controller
 	{
 		$order=$carts=$snapToken='';
 		if($user = Auth::guard('webmember')->user()){
-			$order = Order::withCount('order_detail')->where([
+			$order = Order::has('order_detail.product')->withCount('order_detail')->where([
 				['id_member', $user->id],
 				['status', '=', ""],
 			])->first();
 			if ($order && ($id = $request->id)) {
-				$carts = OrderDetail::with('product')->where('id_order', $id)->get();
+				// $carts = OrderDetail::with('product')->where('id_order', $id)->get();
+				$carts = OrderDetail::has('product')->with('product')->where('id_order', $id)->get();
 			}
 
 			$merchantId = config('midtrans.merchant_id');
@@ -143,7 +146,7 @@ class HomeController extends Controller
 	}
 
 	public function countKeranjang(Request $request){
-		if($data = Order::withCount('order_detail')->where([['id',$request->id],['status',""]])->first()){
+		if($data = Order::has('order_detail.product')->withCount('order_detail')->where([['id',$request->id],['status',""]])->first()){
 			return ['success'=>true,'code'=>200,'message'=>'Data found','data'=>$data];
 		}
 		return ['success'=>false,'code'=>500,'message'=>'Data not found'];
@@ -217,7 +220,7 @@ class HomeController extends Controller
 		// $data['products'] = Product::where('id_kategori', $id)->get();
 		$data['order'] = $data['carts'] = '';
 		if ($user = Auth::guard('webmember')->user()) {
-			$data['order'] = Order::withCount('order_detail')->where([
+			$data['order'] = Order::has('order_detail.product')->withCount('order_detail')->where([
 				['id_member', $user->id],
 				['status', '=', ''],
 			])->first();
@@ -226,11 +229,70 @@ class HomeController extends Controller
 		return view('home.about', $data);
 	}
 
+	public function profile(){
+		$user = Auth::guard('webmember')->user();
+		$data['user'] = $user ? $user : '';
+		$data['pesanan'] = [];
+		if($user){
+			$data['pesanan'] = Order::has('order_detail.product')->with('order_detail.product','member')->where([
+				['lunas',1],
+				['id_member',$user->id],
+			])->orderBy('id','DESC')->get();
+		}
+		return view('home.profile',$data);
+	}
+	public function save_profile(Request $request){
+		$validator = Validator::make(
+			$request->all(),
+			[
+				'nama' => 'required',
+				'nomor' => 'required',
+				'email' => 'required',
+				'provinsi' => 'required',
+				'kabupaten' => 'required',
+				'kecamatan' => 'required',
+				'alamat' => 'required',
+			],
+			[
+				'nama.required' => 'Nama harus diisi',
+				'nomor.required' => 'Nomor HP harus diisi',
+				'email.required' => 'Email harus diisi',
+				'provinsi.required' => 'Provinsi harus diisi',
+				'kabupaten.required' => 'Kabupaten harus diisi',
+				'kecamatan.required' => 'Kecamatan harus diisi',
+				'alamat.required' => 'Alamat harus diisi',
+			]
+		);
+		if($validator->fails()){
+			$msg = '';
+			foreach($validator->errors()->toArray() as $key => $val){
+				$msg = $val[0];
+				break;
+			}
+			return ['success'=>false,'code'=>406,'message'=>$msg];
+		}
+		if(!$member = Member::where('id',$request->id)->first()){
+			return ['success'=>false,'code'=>400,'message'=>'Data tidak ditemukan'];
+		}
+		$member->nama_member = $request->nama;
+		$member->provinsi = $request->provinsi;
+		$member->kabupaten = $request->kabupaten;
+		$member->kecamatan = $request->kecamatan;
+		$member->detail_alamat = $request->alamat;
+		$member->no_hp = $request->nomor;
+		$member->email = $request->email;
+		$member->save();
+		if(!$member){
+			return ['success'=>false,'code'=>500,'message'=>'Data gagal diperbarui'];
+		}
+		return ['success'=>true,'code'=>200,'message'=>'Data berhasil diperbarui'];
+	}
+
 	public function contact()
 	{
 		$data['order'] = $data['carts'] = '';
 		if ($user = Auth::guard('webmember')->user()) {
-			$data['order'] = Order::withCount('order_detail')->where([
+			$data['order'] = Order::has('order_detail.product')->withCount('order_detail')->where([
 				['id_member', $user->id],
 				['status', '=', ''],
 			])->first();
@@ -254,6 +316,7 @@ class HomeController extends Controller
 	public function callback(Request $request){
 		// $merchantId = config('midtrans.merchant_id');
 		// $clientKey = config('midtrans.client_key');
+		date_default_timezone_set('Asia/Jakarta');
 		$serverKey = config('midtrans.server_key');
 		$string = $request->order_id.$request->status_code.$request->gross_amount;
 		$hashed = hash('SHA512', $string.$serverKey); # Buat enskripsi string{signature_key} 
@@ -264,6 +327,7 @@ class HomeController extends Controller
 				if($order = Order::where('id',$orderId)->first()){
 					$order->status = 'Baru';
 					$order->lunas = true;
+					$order->tanggal = date('Y-m-d');
 					$order->save();
 					if(count($orderDetail = OrderDetail::where('id_order',$orderId)->get()) > 0){ # Ambil semua data detail berdasarkan id order
 						foreach($orderDetail as $key => $val){

@@ -1,4 +1,4 @@
-@extends('layout.app')
+{{-- @extends('layout.app')
 
 @section('title', 'Data Pembayaran')
 
@@ -198,4 +198,4 @@
 
     });
 </script>
-@endpush
+@endpush --}}

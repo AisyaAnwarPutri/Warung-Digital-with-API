@@ -9,7 +9,7 @@ use DataTables;
 class RiwayatStokController extends Controller{
 	public function index(Request $request){
 		if(request()->ajax()){
-			$riwayat = RiwayatStok::with('product','user')->orderBy('id','ASC')->get();
+			$riwayat = RiwayatStok::with('product','user')->orderBy('id','DESC')->get();
 			return DataTables::of($riwayat)
 				->addIndexColumn()
 				->addColumn('user',function($row){

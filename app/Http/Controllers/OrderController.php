@@ -27,15 +27,44 @@ class OrderController extends Controller{
 	}
 
 	public function dataTable($statusAwal,$nextStatus){
-		$order = Order::with('member')->where('status',$statusAwal)->orderBy('id','DESC')->get();
+		$order = Order::has('order_detail.product')
+			->with('order_detail.product','member')->where('status',$statusAwal)->orderBy('id','DESC')->get();
 		return DataTables::of($order)
 			->addIndexColumn()
 			->addColumn('tanggal',function($row){
-				$text = $row->created_at ? date('d-m-Y',strtotime($row->created_at)) : '-';
+				$text = $row->tanggal ? date('d-m-Y',strtotime($row->tanggal)) : '-';
+				return "<p class='text-center'>$text</p>";
+			})
+			->addColumn('nama_produk',function($row){
+				if(count($row->order_detail)>0){
+					$nama = '';
+					foreach($row->order_detail as $key => $val){
+						$nama .= $val->product->nama_produk.', ';
+					}
+					$nama = rtrim($nama, ", ");
+					return $nama;
+				}
+				$text = $row->order_detail ? ucwords(strtolower($row->member->nama_member)) : '-';
 				return "<p class='text-center'>$text</p>";
 			})
 			->addColumn('member',function($row){
 				$text = $row->member ? ucwords(strtolower($row->member->nama_member)) : '-';
+				return "<p class='text-center'>$text</p>";
+			})
+			->addColumn('no_hp',function($row){
+				$text = $row->member ? $row->member->no_hp : '-';
+				return "<p class='text-center'>$text</p>";
+			})
+			->addColumn('alamat',function($row){
+				$text = $row->member ? $row->member->detail_alamat : '-';
+				return "<p class='text-center'>$text</p>";
+			})
+			->addColumn('kabupaten',function($row){
+				$text = $row->member ? $row->member->kabupaten : '-';
+				return "<p class='text-center'>$text</p>";
+			})
+			->addColumn('provinsi',function($row){
+				$text = $row->member ? $row->member->provinsi : '-';
 				return "<p class='text-center'>$text</p>";
 			})
 			->addColumn('aksi',function($row)use($nextStatus){
@@ -62,7 +91,7 @@ class OrderController extends Controller{
 					<button class='btn btn-sm editProduk btn-info' onclick='ubahStatus($params)' type='button' title='$title'>$text</button>
 				";
 				return $txt;
-			})->rawColumns(['tanggal','member','aksi'])->toJson();
+			})->rawColumns(['tanggal','nama_produk','member','no_hp','alamat','kabupaten','provinsi','aksi'])->toJson();
 	}
 
 	public function baru(Request $request){

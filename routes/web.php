@@ -28,13 +28,13 @@ Route::controller(AuthController::class)->group(function(){
 // Route::get('logout', [AuthController::class, 'logout']);
 
 // login user
-Route::get('login_member', [AuthController::class, 'login_member']);
+Route::get('login_member', [AuthController::class, 'login_member'])->name('login_member');
 Route::post('login_member', [AuthController::class, 'login_member_action']);
 Route::get('logout_member', [AuthController::class, 'logout_member']);
 
 // register user
 Route::get('register_member', [AuthController::class, 'register_member']);
-Route::post('register_member', [AuthController::class, 'register_member_action']);
+Route::post('register_member', [AuthController::class, 'register_member_action'])->name('register_member_action');
 
 # Kategori start
 Route::controller(CategoryController::class)
@@ -143,6 +143,8 @@ Route::get('/orders', [HomeController::class, 'orders']);
 Route::get('/cart', [HomeController::class, 'cart']);
 Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/about', [HomeController::class, 'about']);
+Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
+Route::post('/profile', [HomeController::class, 'save_profile'])->name('save_profile');
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/faq', [HomeController::class, 'faq']);
 Route::get('/category/{id}', [HomeController::class, 'category']);

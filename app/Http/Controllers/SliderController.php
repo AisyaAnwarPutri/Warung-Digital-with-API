@@ -6,6 +6,7 @@ use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use DataTables;
 
 class SliderController extends Controller{
 	public function __construct(){
@@ -22,8 +23,26 @@ class SliderController extends Controller{
 	}
 
 	public function index(){
-		$sliders = Slider::all();
-		return view('slider.index',compact('sliders'));
+		if(request()->ajax()){
+			$sliders = Slider::all();
+			return DataTables::of($sliders)
+				->addIndexColumn()
+				->addColumn('gambar',function($row){
+					$gambar = "<p class='text-center'>-</p>";
+					if($row->gambar && file_exists(public_path().'/storage/'.$row->gambar)){
+						$gambar = "<img class='rounded mx-auto d-block responsive img-thumbnail' src='storage/".$row->gambar."'>";
+					}
+					return $gambar;
+				})
+				->addColumn('aksi',function($row){
+					$txt = "
+						<button class='btn btn-sm btn-warning' onclick='ubahSlider($row->id)' type='button' title='edit'><i class='fa-solid fa-pen-to-square'></i></button>
+						<button class='btn btn-sm btn-danger' onclick='hapusSlider($row->id)' type='button' title='hapus'><i class='fa-solid fa-trash'></i></button>
+					";
+					return $txt;
+				})->rawColumns(['kategori','gambar','aksi'])->toJson();
+		}
+		return view('slider.index');
 	}
 
 	public function store(Request $request){

@@ -2,6 +2,11 @@
 
 @section('title', 'Data Slider')
 
+@push('style')
+<link href="{{asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" />
+<link href="{{asset('assets/fontawesome/css/all.min.css')}}" rel="stylesheet" />
+@endpush
+
 @section('content')
 <div class="card shadow">
 	<div class="card-header">
@@ -14,7 +19,7 @@
 			<a href="javascript:void(0)" class="btn btn-success modal-tambah">Tambah Data</a>
 		</div>
 		<div class="table-responsive">
-			<table class="table table-bordered table-hover table-striped">
+				<table id="dataTable" class="table table-bordered table-striped text-center" style="width:100%">
 					<thead>
 						<tr>
 							<th>No</th>
@@ -24,7 +29,7 @@
 							<th>Aksi</th>
 						</tr>
 					</thead>
-					<tbody>
+					{{-- <tbody>
 						@if(count($sliders)>0)
 						@foreach($sliders as $key => $val)
 							<tr>
@@ -46,7 +51,7 @@
 							</tr>
 						@endforeach
 						@endif
-					</tbody>
+					</tbody> --}}
 			</table>
 		</div>
 	</div>
@@ -95,177 +100,131 @@
 @endsection
 
 @push('js')
-<script>
-	// function loadTable(){
-	// 	$.ajax({
-	// 		url: '{{route("slider.list")}}',
-	// 		method: 'POST',
-	// 		success: (res)=>{
-	// 			let row;
-	// 			res.data.map(function(val, index) {
-	// 				row += `
-	// 					<tr>
-	// 						<td>${index+1}</td>
-	// 						<td>${val.nama_slider}</td>
-	// 						<td>${val.deskripsi}</td>
-	// 						<td><img src="/storage/${val.gambar}" width="150"></td>
-	// 						<td>
-	// 							<a href="#modal-form" data-id="${val.id}" class="btn btn-warning modal-ubah">Edit</a>
-	// 							<a href="#" data-id="${val.id}" class="btn btn-danger btn-hapus">hapus</a>
-	// 						</td>
-	// 					</tr>
-	// 				`;
-	// 			});
-	// 			$('tbody').empty()
-	// 			$('tbody').append(row)
-	// 		}
-	// 	});
-	// }
-
-	$('.btn-submit').click(()=>{
-		const frmdata = new FormData($('.form-slider')[0]);
-		$.ajax({
-			url: '{{route("slider.store")}}',
-			type: 'POST',
-			data: frmdata,
-			cache: false,
-			contentType: false,
-			processData: false,
-			success: (res)=>{
-				if(res.success){
-					window.location.reload()
-				}
-				alert(res.message)
-			}
-		}).fail(()=>{
-			alert('Terjadi kesalahan sistem')
-		})
-	});
-
-	// $(document).on('click', '.btn-hapus', function() {
-	// 	const id = $(this).data('id')
-	// 	const token = localStorage.getItem('token')
-
-	// 	confirm_dialog = confirm('Apakah anda yakin?');
-
-	// 	if (confirm_dialog) {
-	// 			$.ajax({
-	// 				url: '/api/sliders/' + id,
-	// 				type: "DELETE",
-	// 				headers: {
-	// 					"Authorization":"Bearer "+token
-	// 				},
-	// 				success: function(data) {
-	// 					if (data.message == 'success') {
-	// 							alert('Data berhasil dihapus')
-	// 							location.reload()
-	// 					}
-	// 				}
-	// 			});
-	// 	}
-
-
-	// });
-
-	$('.modal-tambah').click(()=>{
-      $('#modal-form').modal('show')
-      $('#id_slider').val('')
-		$('input[name="nama_slider"]').val('')
-		$('textarea[name="deskripsi"]').val('')
-		// $('.form-slider').submit(function(e) {
-		// 	//  e.preventDefault()
-		// 	//  const token = localStorage.getItem('token')
-		// 	//  const frmdata = new FormData(this);
-		// 	$.ajax({
-		// 		url: '{{route("slider.store")}}',
-		// 		type: 'POST',
-		// 		data: frmdata,
-		// 		cache: false,
-		// 		contentType: false,
-		// 		processData: false,
-		// 		// headers: {
-		// 		// 	"Authorization":"Bearer "+token
-		// 		// },
-		// 		success: function(res) {
-		// 			console.log(res)
-		// 			// if (data.success) {
-		// 			// 		// alert('Data berhasil ditambah')
-		// 			// 		// location.reload();
-		// 			// }
-		// 		}
-		// 	})
-		// });
-	});
-
-	function ubah(id){
-		$('#modal-form').modal('show')
-		$.post('{{route("slider.get")}}',{id:id},(res)=>{
-			if(res.success){
-				$('#id_slider').val(res.data.id)
-				$('input[name="nama_slider"]').val(res.data.nama_slider);
-				$('textarea[name="deskripsi"]').val(res.data.deskripsi);
-			}
+	<script src="{{asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js')}}"></script>
+	<script src="{{asset('assets/fontawesome/js/all.min.js')}}"></script>
+	<script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script><!--sweetAlert-->
+	<script>
+		$(document).ready(()=>{
+			dataTable()
 		});
-	}
+		function dataTable(){
+			const loading = '<div class="spinner-grow text-primary" role="status"> <span class="visually-hidden"></span></div>'
+			$('#dataTable').DataTable({
+				scrollX: true,
+				serverSide: true,
+				processing: true,
+				language: {
+					processing: loading+' '+loading+' '+loading
+				},
+				ajax: '{{route("slider.index")}}',
+				columns: [
+					{data:'DT_RowIndex', name:'DT_RowIndex'},
+					{data:'nama_slider', name:'nama_slider'},
+					{data:'deskripsi', name:'deskripsi'},
+					{data:'gambar', name:'gambar'},
+					{data:'aksi', name:'aksi'}
+				],
+			});
+		}
 
-	function hapus(id){
-		confirm_dialog = confirm("Anda yakin?\ndata yang sudah dihapus tidak bisa dikembalikan");
-		if (confirm_dialog) {
+		$('.btn-submit').click(()=>{
+			const frmdata = new FormData($('.form-slider')[0]);
 			$.ajax({
-				url: '{{route("slider.destroy")}}',
-				data: {id:id},
-				method: 'POST',
-				success: function(res) {
-					alert(res.message)
+				url: '{{route("slider.store")}}',
+				type: 'POST',
+				data: frmdata,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: (res)=>{
 					if(res.success){
-						window.location.reload()
+						$('#modal-form').modal('hide')
+						Swal.fire({
+							icon: 'success',
+							title: 'Berhasil',
+							text: res.message,
+							timer: 1000,
+							showConfirmButton: false,
+						});
+						$('#id_slider').val('')
+						$('input[name="nama_slider"]').val('')
+						$('textarea[name="deskripsi"]').val('')
+						setTimeout(() => {
+							$('#dataTable').DataTable().ajax.reload()
+						}, 1000);
+					}else{
+						Swal.fire({
+							icon: 'error',
+							title: 'Gagal',
+							text: res.message,
+							showConfirmButton: true,
+						});
 					}
+				}
+			}).fail(()=>{
+				Swal.fire({
+					icon: 'error',
+					title: 'Gagal',
+					text: 'Terjadi kesalahan sistem!',
+					showConfirmButton: true,
+				});
+			})
+		});
+
+		$('.modal-tambah').click(()=>{
+			$('#modal-form').modal('show')
+			$('#id_slider').val('')
+			$('input[name="nama_slider"]').val('')
+			$('textarea[name="deskripsi"]').val('')
+		});
+
+		function ubahSlider(id){
+			$('#modal-form').modal('show')
+			$.post('{{route("slider.get")}}',{id:id},(res)=>{
+				if(res.success){
+					$('#id_slider').val(res.data.id)
+					$('input[name="nama_slider"]').val(res.data.nama_slider);
+					$('textarea[name="deskripsi"]').val(res.data.deskripsi);
 				}
 			});
 		}
-	}
 
-	// $('.modal-ubah').click(()=>{
-	// 	const id = $(this).data('id');
-	// 	$.get('sliders/' + id,(res)=>{
-	// 		$('input[name="nama_slider"]').val(data.nama_slider);
-	// 		$('textarea[name="deskripsi"]').val(data.deskripsi);
-	// 	});
-	// })
-
-	// $(document).on('click', '.modal-ubah', function() {
-	// 	$('#modal-form').modal('show')
-	// 	const id = $(this).data('id');
-
-	// 	$.get('sliders/' + id,(res)=>{
-	// 		$('input[name="nama_slider"]').val(data.nama_slider);
-	// 		$('textarea[name="deskripsi"]').val(data.deskripsi);
-	// 	});
-
-	// 	// $('.form-slider').submit(function(e) {
-	// 	// 	e.preventDefault()
-	// 	// 	const token = localStorage.getItem('token')
-	// 	// 	const frmdata = new FormData(this);
-
-	// 	// 	$.ajax({
-	// 	// 		url: `api/sliders/${id}?_method=PUT`,
-	// 	// 		type: 'POST',
-	// 	// 		data: frmdata,
-	// 	// 		cache: false,
-	// 	// 		contentType: false,
-	// 	// 		processData: false,
-	// 	// 		headers: {
-	// 	// 			"Authorization":"Bearer "+token
-	// 	// 		},
-	// 	// 		success: function(data) {
-	// 	// 			if (data.success) {
-	// 	// 					alert('Data berhasil diubah')
-	// 	// 					location.reload();
-	// 	// 			}
-	// 	// 		}
-	// 	// 	})
-	// 	// });
-
-	// });
-</script>
+		function hapusSlider(id){
+			Swal.fire({
+				title: "Anda Yakin?",
+				text: "Data Akan Dihapus Dari Sistem!",
+				icon: "warning",
+				showCancelButton: true,
+				reverseButtons: true,
+				confirmButtonColor: '#d33',
+				cancelButtonColor: '#rgb(155 155 155)',
+				confirmButtonText: "Ya, Hapus!",
+				cancelButtonText: "Batal."
+			}).then((res)=>{
+				if(res.isConfirmed){
+					$.post("{{route('slider.destroy')}}",{id:id}).done((res)=>{
+						if(res.success){
+							Swal.fire({
+								icon: 'success',
+								title: 'Berhasil',
+								text: res.message,
+								timer: 1000,
+								showConfirmButton: false,
+							});
+							$('#dataTable').DataTable().ajax.reload()
+						}else{
+							Swal.fire({
+								icon: 'error',
+								title: 'Gagal',
+								text: res.message,
+								showConfirmButton: true,
+							});
+						}
+					});
+				}
+			});
+		}
+	</script>
 @endpush

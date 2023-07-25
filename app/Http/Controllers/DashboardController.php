@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
@@ -16,8 +17,9 @@ class DashboardController extends Controller
 
 	public function index()
 	{
-		$data['jumlahOrder'] = OrderDetail::whereHas('order',fn($q)=>$q->where('lunas',true))->sum('jumlah');
-		$data['penghasilan'] = OrderDetail::whereHas('order',fn($q)=>$q->where('lunas',true))->sum('harga');
+      $data['produk'] = Product::count();
+		$data['jumlahOrder'] = OrderDetail::has('product')->whereHas('order',fn($q)=>$q->where('lunas',true))->sum('jumlah');
+		$data['penghasilan'] = OrderDetail::has('product')->whereHas('order',fn($q)=>$q->where('lunas',true))->sum('harga');
 		return view('dashboard',$data);
 	}
 }

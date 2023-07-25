@@ -44,8 +44,8 @@
 		<div id="mainLayer">
 			<div class="card">
 				<div class="card-header">
-					<div class="col-12">
-						<button type="button" class="btn btn-primary px-3 btnAdd">
+					<div class="d-flex justify-content-end mb-4">
+						<button type="button" class="btn btn-success px-3 btnAdd">
 							<i class="fadeIn animated bx bx-plus"></i>Tambah Baru
 						</button>
 					</div>

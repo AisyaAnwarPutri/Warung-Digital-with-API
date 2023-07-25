@@ -1,6 +1,6 @@
 @extends('layout.home')
 
-@section('title', 'Cart')
+@section('title', 'Keranjang')
 
 @section('content')
 <!-- Cart -->

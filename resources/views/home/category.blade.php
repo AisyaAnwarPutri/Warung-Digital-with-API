@@ -1,6 +1,6 @@
 @extends('layout.home')
 
-@section('title', 'About')
+@section('title', 'Kategori')
 @section('content')
 @php
 	function rupiah($angka){
@@ -35,17 +35,17 @@
 			<!-- Filter -->
 			<div class="shop-filter">
 				<div class="view-mode hidden-xs">
-					<span>View:</span>
+					<span>Lihat:</span>
 					<a class="grid grid-active" id="grid"></a>
 					<a class="list" id="list"></a>
 				</div>
-				<div class="filter-show hidden-xs">
-					<span>Show:</span>
+				{{-- <div class="filter-show hidden-xs">
+					<span>Tampilkan:</span>
 					<a href="javascript:void(0)" class="active">12</a>
 					<a href="javascript:void(0)">24</a>
-					<a href="javascript:void(0)">all</a>
-				</div>
-				<form class="ecommerce-ordering">
+					<a href="javascript:void(0)">Semua</a>
+				</div> --}}
+				{{-- <form class="ecommerce-ordering">
 					<select>
 						<option value="default-sorting">Default Sorting</option>
 						<option value="price-low-to-high">Price: high to low</option>
@@ -54,7 +54,7 @@
 						<option value="date">By Newness</option>
 						<option value="rating">By Rating</option>
 					</select>
-				</form>
+				</form> --}}
 			</div>
 
 			<div class="row">
@@ -111,22 +111,16 @@
 											{{-- <a href="javascript:void(0)">Drawstring Dress</a> --}}
 										</h3>
 										<span class="price">
-											<del>
+											{{-- <del>
 												<span>$730.00</span>
-											</del>
+											</del> --}}
 											<ins>
-												<span class="amount">$159.99</span>
+												<span class="amount">{{rupiah($value->harga)}}</span>
 											</ins>
 										</span>
-										<span class="rating">
-											<a href="javascript:void(0)">3 Reviews</a>
-										</span>
 										<div class="clear"></div>
-										<p>Zenna Shop is a very slick and clean e-co	mmerce template with endless possibilities. Creating an awesome clothes store with this Theme is easy than you can imagine. Grab this theme now.</p>
-										<a href="javascript:void(0)" class="btn btn-dark btn-md left"><span>Add to Cart</span></a>
-										<div class="product-add-to-wishlist">
-											<a href="javascript:void(0)"><i class="fa fa-heart"></i></a>
-										</div>
+										<p>{{$value->deskripsi}}</p>
+										<a href="javascript:void(0)" class="btn btn-dark btn-md left"><span>Tambah Keranjang</span></a>
 									</div>
 								</div>
 							</div>
@@ -154,22 +148,6 @@
 			</div> <!-- end row -->
 		</div> <!-- end container -->
 	</section> <!-- end catalog -->
-
-
-		<!-- Newsletter -->
-	<section class="newsletter" id="subscribe">
-		<div class="container">
-			<div class="row">
-			<div class="col-sm-12 text-center">
-				<h4>Get the latest updates</h4>
-				<form class="relative newsletter-form">
-					<input type="email" class="newsletter-input" placeholder="Enter your email">
-					<input type="submit" class="btn btn-lg btn-dark newsletter-submit" value="Subscribe">
-				</form>
-			</div>
-			</div>
-		</div>
-	</section>
 	<div id="back-to-top">
 		<a href="javascript:void(0)top"><i class="fa fa-angle-up"></i></a>
 	</div>

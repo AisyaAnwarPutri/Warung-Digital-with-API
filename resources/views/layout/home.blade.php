@@ -39,9 +39,10 @@
 
 	<style>
 		.menu{
-			padding:1rem 1rem 1rem 55rem;
+			padding:1rem 1rem 1rem 49rem;
 		}
 	</style>
+	@stack('style')
 </head>
 <body class="relative">
 	<div class="loader-mask">
@@ -100,9 +101,9 @@
 										<li class="dropdown">
 											<a href="/">Beranda</a>
 										</li>
-										<li class="dropdown">
+										{{-- <li class="dropdown">
 											<a href="/about">Tentang</a>
-										</li>
+										</li> --}}
 										<li class="dropdown">
 											<a href="javascript:void(0)">Kategori</a>
 											<i class="fa fa-angle-down dropdown-trigger"></i>
@@ -153,7 +154,7 @@
 								<ul>
 									@if(!empty($user = Auth::guard('webmember')->user()))
 									<li class="nav-register">
-										<span style="font-size:17px; font-weight:700;">{{ucwords($user->nama_member)}}</span>
+										<a href="{{route('profile')}}"><span style="font-size:17px; font-weight:700;">{{ucwords($user->nama_member)}}</span></a>
 									</li>
 									<li class="nav-register">
 										<a href="/logout_member">LogOut</a>
@@ -171,8 +172,18 @@
 									<li class="nav-cart">
 										<div class="nav-cart-outer">
 											<div class="nav-cart-inner">
-												@if(!empty($user = Auth::guard('webmember')->user()) && isset($order))
-												<a href="/cart?id={{$order?$order->id:''}}" class="nav-cart-icon" id="link-keranjang"><span style="font-size:15px;" id="keranjang">{{$order?$order->order_detail_count:0}}</span></a>
+												@if(!empty($user = Auth::guard('webmember')->user()))
+                                    @php
+                                    // $urlKeranjang = "javascript:void(0)";
+                                    $id = '';
+                                    $num = 0;
+                                    if(isset($order)){
+                                       $id = $order->id;
+                                       $num = $order->order_detail_count;
+                                    }
+                                    $urlKeranjang = "/cart?id=".$id;
+                                    @endphp
+												<a href="{{$urlKeranjang}}" class="nav-cart-icon" id="link-keranjang"><span style="font-size:15px;" id="keranjang">{{$num}}</span></a>
 												@endif
 											</div>
 										</div>

@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->integer('grand_total')->comment('Total semua harga produk di detail order');
             $table->string('status');
             $table->boolean('lunas')->default(0)->change()->comment('lunas{1}, belum lunas{0}');
+            $table->date('tanggal')->nullable()->comment('Tanggal bayar / transaksi');
             $table->timestamps();
         });
 

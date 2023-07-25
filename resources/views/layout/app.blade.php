@@ -77,24 +77,24 @@
 					</div>
 				</div>
 			</li>
-			<li class="nav-item">
+			{{-- <li class="nav-item">
 				<a class="nav-link" href="/payment">
 					<i class="fas fa-fw fa-credit-card"></i>
 					<span>Pembayaran</span>
 				</a>
-			</li>
+			</li> --}}
 			<li class="nav-item">
 				<a class="nav-link" href="/laporan">
 					<i class="fas fa-fw fa-book"></i>
 					<span>Laporan Pesanan</span>
 				</a>
 			</li>
-			<li class="nav-item">
+			{{-- <li class="nav-item">
 				<a class="nav-link" href="/tentang">
 					<i class="fas fa-fw fa-globe"></i>
 					<span>Tentang</span>
 				</a>
-			</li>
+			</li> --}}
 			<li class="nav-item">
 				<a class="nav-link" href="{{route('riwayat_stok.index')}}">
 					<i class="fa fa-history"></i>

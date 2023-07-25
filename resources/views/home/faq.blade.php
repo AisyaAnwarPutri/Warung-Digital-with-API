@@ -9,62 +9,7 @@
         <div class="row">
 
             <div class="col-sm-9">
-                <h2 class="mb-20"><small>Pertanyaan Pengiriman</small></h2>
-
-                <div class="panel-group accordion mb-50" id="accordion-1">
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion-1" href="#collapse-1" class="minus">bagaimana
-                                lacak pengiriman saya?<span>&nbsp;</span>
-                            </a>
-                        </div>
-                        <div id="collapse-1" class="panel-collapse collapse in">
-                            {{-- <div class="panel-body">
-                                Our Theme is a very slick and clean e-commerce template with endless possibilities.
-                                Creating an awesome website. Canna Theme is a very slick and clean e-commerce template
-                                with endless possibilities.
-                            </div> --}}
-                        </div>
-                    </div>
-
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion-1" href="#collapse-2" class="plus">Di mana
-                                dapatkah saya menemukan nomor pelacakan?<span>&nbsp;</span>
-                            </a>
-                        </div>
-                        <div id="collapse-2" class="panel-collapse collapse">
-                            {{-- <div class="panel-body">
-                                We possess within us two minds. So far I have written only of the conscious mind. I
-                                would now like to introduce you to your second mind, the hidden and mysterious
-                                subconscious. Our subconscious mind contains such power and complexity that it literally
-                                staggers the imagination.And finally the subconscious is the mechanism through which
-                                thought impulses which are repeated regularly with feeling and emotion are quickened,
-                                charged. Our subconscious mind contains such power and complexity that it literally
-                                staggers the imagination.
-                            </div> --}}
-                        </div>
-                    </div>
-
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion-1" href="#collapse-3" class="plus">Apa
-                                metode pengiriman yang dapat saya gunakan?<span>&nbsp;</span>
-                            </a>
-                        </div>
-                        <div id="collapse-3" class="panel-collapse collapse">
-                            {{-- <div class="panel-body">
-                                We possess within us two minds. So far I have written only of the conscious mind. I
-                                would now like to introduce you to your second mind, the hidden and mysterious
-                                subconscious. Our subconscious mind contains such power and complexity that it literally
-                                staggers the imagination.And finally the subconscious is the mechanism through which
-                                thought impulses which are repeated regularly with feeling and emotion are quickened,
-                                charged. Our subconscious mind contains such power and complexity that it literally
-                                staggers the imagination.
-                            </div> --}}
-                        </div>
-                    </div>
-                </div> <!-- end accordion -->
+                
 
 
                 <h2 class="mb-20 mt-80"><small>pertanyaan Pembayaran</small></h2>

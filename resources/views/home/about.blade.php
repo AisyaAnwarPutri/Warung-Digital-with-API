@@ -1,6 +1,6 @@
 @extends('layout.home')
 
-@section('title', 'About')
+@section('title', 'Tentang')
 
 @section('content')
 	 <!-- Intro -->
