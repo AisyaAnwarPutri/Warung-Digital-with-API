@@ -36,7 +36,7 @@
 		<div class="container">
 			<div class="row heading-row">
 			<div class="col-md-12 text-center">
-				<span class="subheading">Produk Terbaru</span>
+				{{-- <span class="subheading">Produk Terbaru</span> --}}
 				<h2 class="heading bottom-line">
 					Produk Terlaris
 				</h2>

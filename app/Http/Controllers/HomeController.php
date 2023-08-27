@@ -23,7 +23,10 @@ class HomeController extends Controller
 	public function index()
 	{
 		$data['slider'] = Slider::orderBy('id', 'DESC')->limit(3)->get();
-		$data['product'] = Product::orderBy('id', 'DESC')->limit(8)->get();
+		$data['product'] = Product::with('order_detail')
+			->withCount('order_detail')
+			->orderBy('order_detail_count','DESC')
+			->limit(8)->get();
 		$data['order'] = '';
 		if ($user = Auth::guard('webmember')->user()) {
 			$data['order'] = Order::has('order_detail.product')->withCount('order_detail')->where([
