@@ -51,6 +51,24 @@ class ProductController extends Controller{
 		return view('product.index');
 	}
 
+	public function listProduct(Request $request){
+		$product = Product::all();
+		if(count($product)>0){
+			return response()->json(['success'=>true,'code'=>200,'message'=>'Data found','data'=>$product],200);
+		}
+		return response()->json(['success'=>false,'code'=>204,'message'=>'Data not found','data'=>[]],204);
+	}
+	public function searchProduct(Request $request){
+		// return $request->all();
+		if(!$product = Product::where('id',$request->id)->first()){
+			return response()->json(['success'=>false,'code'=>204,'message'=>'Produk tidak ditemukan','data'=>[]],204);
+		}
+		if($product->stok < $request->qty){
+			return response()->json(['success'=>false,'code'=>422,'message'=>"Stok ".strtoupper($product->nama_produk)." tersisa $product->stok",'data'=>$product],422);
+		}
+		return response()->json(['success'=>true,'code'=>200,'message'=>'Data not found','data'=>$product],200);
+	}
+
 	public function form(Request $request){
 		if(isset($request->id)){
 			$data['page'] = 'Edit';

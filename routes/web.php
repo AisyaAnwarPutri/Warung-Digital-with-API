@@ -67,6 +67,8 @@ Route::controller(ProductController::class)
 	->as('produk.')
 	->group(function(){
 		Route::get('/', 'index')->name('index');
+		Route::post('list', 'listProduct')->name('list');
+		Route::post('search', 'searchProduct')->name('search');
 		Route::post('form', 'form')->name('form_produk');
 		Route::post('store', 'store')->name('save_produk');
 		Route::post('destroy', 'destroy')->name('destroy_produk');
@@ -110,11 +112,21 @@ Route::controller(OrderController::class)
 		Route::get('kirim', 'kirim')->name('kirim');
 		Route::get('terima', 'terima')->name('terima');
 		Route::get('selesai', 'selesai')->name('selesai');
-      Route::post('ubah-status','ubah_status')->name('ubah_status');
+		Route::post('ubah-status','ubah_status')->name('ubah_status');
 });
 # Pesanan end
 
-Route::get('/laporan', [ReportController::class, 'index'])->name('laporan');
+// Route::get('/laporan', [ReportController::class, 'index'])->name('laporan');
+Route::controller(ReportController::class)->
+	prefix('laporan')->
+	as('laporan.')->
+	group(function(){
+		Route::get('/','index')->name('index');
+		Route::post('form','form')->name('form');
+		Route::post('store','store')->name('store');
+		Route::post('detail','detail')->name('detail');
+});
+
 # Produk start
 Route::controller(TentangController::class)
 	->prefix('tentang')

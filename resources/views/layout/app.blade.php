@@ -84,9 +84,9 @@
 				</a>
 			</li> --}}
 			<li class="nav-item">
-				<a class="nav-link" href="/laporan">
+				<a class="nav-link" href="{{route('laporan.index')}}">
 					<i class="fas fa-fw fa-book"></i>
-					<span>Laporan Pesanan</span>
+					<span>Laporan Penjualan</span>
 				</a>
 			</li>
 			{{-- <li class="nav-item">
